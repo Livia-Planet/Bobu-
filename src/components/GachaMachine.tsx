@@ -44,9 +44,11 @@ interface GachaMachineProps {
   setNewGachaItems: React.Dispatch<React.SetStateAction<string[]>>;
   isDarkMode: boolean;
   lang: Language;
+  tutorialStep?: string;
+  setTutorialStep?: (step: any) => void;
 }
 
-export const GachaMachine: React.FC<GachaMachineProps> = ({ plusCoins, setPlusCoins, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, isDarkMode, lang }) => {
+export const GachaMachine: React.FC<GachaMachineProps> = ({ plusCoins, setPlusCoins, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, isDarkMode, lang, tutorialStep, setTutorialStep }) => {
   const [pullStage, setPullSequence] = useState<'idle' | 'churning' | 'flash' | 'speedlines' | 'reveal'>('idle');
   const [pulledItem, setPulledItem] = useState<GachaItem | null>(null);
   const [pullRarity, setPullRarity] = useState<'N' | 'R' | 'SR' | 'UR' | null>(null);
@@ -180,10 +182,12 @@ export const GachaMachine: React.FC<GachaMachineProps> = ({ plusCoins, setPlusCo
             whileTap={{ scale: 0.8, y: -10 }}
             onClick={handlePull}
             disabled={plusCoins < 5 || pullStage !== 'idle'}
-            className={`w-24 h-20 -mt-4 z-0 rounded-b-3xl border-8 border-white flex items-end justify-center pb-2 font-black text-white text-lg shadow-lg transition-colors
+            className={`w-24 h-20 -mt-4 z-0 rounded-b-3xl border-8 border-white flex items-end justify-center pb-2 font-black text-white text-lg shadow-lg transition-colors relative
               ${plusCoins >= 5 && pullStage === 'idle' 
                 ? 'bg-pink-400 hover:bg-pink-300 cursor-pointer' 
-                : 'bg-slate-300 text-slate-500 cursor-not-allowed'}`}
+                : 'bg-slate-300 text-slate-500 cursor-not-allowed'}
+              ${tutorialStep === 'gacha_pull' ? 'z-[1000] ring-4 ring-pink-400 ring-offset-4 ring-offset-pink-200 animate-pulse' : ''}
+            `}
           >
             {t.gacha.pull}
           </motion.button>

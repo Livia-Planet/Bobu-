@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { GridData, TileData, AttributeType, Toast } from './types';
+import { GridData, TileData, AttributeType, Toast, TutorialStep } from './types';
 import { ATTRIBUTE_NAMES, EvolutionRecipes } from './constants';
 import { soundEngine, MelodySequencer } from './SoundEngine';
 
@@ -209,6 +209,9 @@ const moveLeft = (grid: GridData, activeLaws: string[] = [], unlockedChainsCount
             attributeName: null,
             level: newValue
           };
+          if (tutorialStep === 'merge_basics') {
+            setTutorialStep('double_tap_cmt');
+          }
         } else {
           // 正常合并
           comboCount++;
@@ -351,6 +354,15 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     const initialChains = localStorage.getItem('bobu_unlockedChains') ? JSON.parse(localStorage.getItem('bobu_unlockedChains')!) : ['Bobu'];
     return initialChains;
   });
+
+  const [tutorialStep, setTutorialStep] = useState<TutorialStep>(() => {
+    const saved = localStorage.getItem('bobu_tutorial');
+    return (saved as TutorialStep) || 'welcome';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('bobu_tutorial', tutorialStep);
+  }, [tutorialStep]);
 
   useEffect(() => {
     localStorage.setItem('bobu_bestScore', bestScore.toString());
@@ -557,7 +569,17 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
       newGrid[r][c] = null;
       return newGrid;
     });
-  }, [grid, activeLaws, addScore]);
+
+    if (tutorialStep === 'double_tap_cmt') {
+      setPlusCoins(p => {
+        const next = Math.max(p, 5);
+        if (next >= 5) {
+          setTutorialStep('gacha_pull');
+        }
+        return next;
+      });
+    }
+  }, [grid, activeLaws, addScore, tutorialStep]);
 
   const useCarrot = useCallback((r: number, c: number) => {
     if (carrots <= 0 || activeProp !== 'carrot') return;
@@ -832,7 +854,7 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
       soundEngine.playError();
       setInstability(prev => Math.min(100, prev + 2));
     }
-  }, [grid, activeLaws, checkCornerBonus, instability, unlockedChains, activeFamilies, unlockedPlanets]);
+  }, [grid, activeLaws, checkCornerBonus, instability, unlockedChains, activeFamilies, unlockedPlanets, tutorialStep]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -865,6 +887,7 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
   return { 
     grid, score, gameOver, message, dataExhaust, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, instability,
     isShaking, carrots, plusCoins, setPlusCoins, activeProp, conflictingIds, activeLaws, setConflictingIds, setActiveProp, useCarrot, boostTile, ascendTile,
-    slide, resetGame, unlockedChains, activeFamilies, setActiveFamilies, goldenFlash, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile
+    slide, resetGame, unlockedChains, activeFamilies, setActiveFamilies, goldenFlash, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile,
+    tutorialStep, setTutorialStep
   };
 };

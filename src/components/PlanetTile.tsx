@@ -183,10 +183,11 @@ interface PlanetTileProps {
   onBoost: (id: string) => void;
   equipment: EquipmentState;
   showInfoOverlay?: boolean;
+  tutorialStep?: string;
 }
 
 export const PlanetTile: React.FC<PlanetTileProps> = ({
-  tile, planet, isHybrid, isConflicting, isResonant, activeProp, flashId, isDarkMode, lastMoveDir, t, onTileClick, onAscend, onBoost, equipment, showInfoOverlay = false
+  tile, planet, isHybrid, isConflicting, isResonant, activeProp, flashId, isDarkMode, lastMoveDir, t, onTileClick, onAscend, onBoost, equipment, showInfoOverlay = false, tutorialStep
 }) => {
   const [isMerging, setIsMerging] = React.useState(false);
   const prevValueRef = React.useRef(tile.value);
@@ -218,6 +219,8 @@ export const PlanetTile: React.FC<PlanetTileProps> = ({
   const showEyes = form >= 2;
   const isUR = form >= 4;
   const showURGlow = isUR && !isHybrid;
+  const isCmt = typeof tile.value === 'string' && tile.value.startsWith('CMT');
+  const isTutorialTarget = tutorialStep === 'double_tap_cmt' && isCmt;
 
   return (
     <motion.div
@@ -232,7 +235,7 @@ export const PlanetTile: React.FC<PlanetTileProps> = ({
       }}
       onDoubleClick={(e) => {
         e.stopPropagation();
-        if (typeof tile.value === 'string' && tile.value.startsWith('CMT')) {
+        if (isCmt) {
           onAscend(tile.r, tile.c);
         }
       }}
@@ -247,6 +250,8 @@ export const PlanetTile: React.FC<PlanetTileProps> = ({
         }
       }}
       className={`absolute w-[4.5rem] h-[4.5rem] rounded-3xl flex flex-col items-center justify-center transition-transform
+        ${isTutorialTarget ? 'z-[1000] ring-4 ring-yellow-400 ring-offset-4 ring-offset-black/60 shadow-[0_0_30px_rgba(250,204,21,0.8)]' : ''}
+        ${showInfoOverlay ? 'z-50' : 'z-10'}
         ${isHybrid ? 'bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 shadow-[0_10px_20px_rgba(168,85,247,0.3)]' : planet.color}
         ${isConflicting ? 'border-4 border-red-400 shadow-[0_0_20px_rgba(248,113,113,0.6)] animate-pulse' : ''}
         ${isResonant && !isConflicting ? 'shadow-[0_0_15px_rgba(255,255,255,0.8)] border border-white/80' : ''}

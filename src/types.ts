@@ -59,3 +59,5 @@ export interface EquipmentState {
   boardTheme: string;
 }
 
+export type TutorialStep = 'welcome' | 'merge_basics' | 'double_tap_cmt' | 'gacha_pull' | 'equip_item' | 'finished';
+

@@ -11,6 +11,7 @@ import { PlanetTile } from './components/PlanetTile';
 import { BottomDrawer } from './components/BottomDrawer';
 import { GachaMachine } from './components/GachaMachine';
 import { PlanetVisual } from './components/LabLog';
+import { TutorialOverlay } from './components/TutorialOverlay';
 import { getHighestUnlockedForm } from './utils';
 import { translations, Language } from './translations';
 import { soundEngine } from './SoundEngine';
@@ -94,7 +95,8 @@ export default function App() {
   const { 
     grid, score, gameOver, message, dataExhaust, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, instability,
     isShaking, carrots, plusCoins, setPlusCoins, activeProp, conflictingIds, activeLaws, setConflictingIds, setActiveProp, useCarrot, boostTile, ascendTile,
-    slide, resetGame, goldenFlash, unlockedChains, activeFamilies, setActiveFamilies, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile
+    slide, resetGame, goldenFlash, unlockedChains, activeFamilies, setActiveFamilies, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile,
+    tutorialStep, setTutorialStep
   } = useGameLogic(equipment.musicTracks);
 
   const handleToggleFamily = (family: string) => {
@@ -357,6 +359,8 @@ export default function App() {
     <div className={`min-h-screen flex flex-col items-center pt-8 pb-32 px-4 font-sans overflow-hidden transition-colors duration-1000 relative
       ${getThemeClasses(equipment.boardTheme, isDarkMode)}
     `}>
+      <TutorialOverlay step={tutorialStep} lang={lang} onNext={() => setTutorialStep('merge_basics')} />
+      
       {isHitlag && <div className="fixed inset-0 z-40 bg-black/60 transition-opacity duration-75" />}
       
       {/* 顶部控制栏 */}
@@ -588,6 +592,7 @@ export default function App() {
                   onBoost={boostTile}
                   equipment={equipment}
                   showInfoOverlay={activeInfoId === tile.id}
+                  tutorialStep={tutorialStep}
                 />
               );
             })}
@@ -887,6 +892,8 @@ export default function App() {
               setNewGachaItems={setNewGachaItems}
               isDarkMode={isDarkMode} 
               lang={lang}
+              tutorialStep={tutorialStep}
+              setTutorialStep={setTutorialStep}
             />
           </motion.div>
         )}
