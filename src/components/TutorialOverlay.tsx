@@ -5,12 +5,11 @@ import { translations, Language } from '../translations';
 
 interface TutorialOverlayProps {
   step: TutorialStep;
+  setStep: (step: TutorialStep) => void;
   lang: Language;
-  onNext: () => void;
-  onSkip: () => void;
 }
 
-export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({ step, lang, onNext, onSkip }) => {
+export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({ step, setStep, lang }) => {
   const t = translations[lang].tutorial;
 
   if (step === 'finished' || step === 'merge_basics') return null;
@@ -41,7 +40,7 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({ step, lang, on
               {t.welcomeDesc}
             </p>
             <button
-              onClick={onNext}
+              onClick={() => setStep('merge_basics')}
               className="w-full py-4 bg-indigo-500 hover:bg-indigo-600 text-white rounded-2xl font-black text-xl shadow-[0_6px_0_#4f46e5] active:shadow-[0_0px_0_#4f46e5] active:translate-y-1.5 transition-all"
             >
               {t.welcomeBtn}
@@ -57,7 +56,7 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({ step, lang, on
             className="relative z-10 bg-white dark:bg-slate-800 p-6 rounded-3xl max-w-sm mx-4 shadow-2xl border-4 border-yellow-400 text-center pointer-events-auto"
           >
             <button 
-              onClick={onSkip}
+              onClick={() => setStep('finished')}
               className="absolute -top-3 -right-3 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded-full px-3 py-1 text-xs font-bold shadow-md transition-colors"
             >
               {t.skip}

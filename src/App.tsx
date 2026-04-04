@@ -366,7 +366,7 @@ export default function App() {
     <div className={`min-h-screen flex flex-col items-center pt-8 pb-32 px-4 font-sans overflow-hidden transition-colors duration-1000 relative
       ${getThemeClasses(equipment.boardTheme, isDarkMode)}
     `}>
-      <TutorialOverlay step={tutorialStep} lang={lang} onNext={() => setTutorialStep('merge_basics')} onSkip={() => setTutorialStep('finished')} />
+      <TutorialOverlay step={tutorialStep} setStep={setTutorialStep} lang={lang} />
       
       {isHitlag && <div className="fixed inset-0 z-40 bg-black/60 transition-opacity duration-75" />}
       
