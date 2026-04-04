@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px) rotate(-2deg); }
+  20%, 40%, 60%, 80% { transform: translateX(5px) rotate(2deg); }
+}
+
+@keyframes shake-violent {
+  0%, 100% { transform: translateX(0) translateY(0) rotate(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-15px) translateY(-10px) rotate(-5deg); }
+  20%, 40%, 60%, 80% { transform: translateX(15px) translateY(10px) rotate(5deg); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-150%) skewX(-12deg); }
+  100% { transform: translateX(150%) skewX(-12deg); }
+}
+
+.animate-shake {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.animate-shake-violent {
+  animation: shake-violent 0.4s ease-in-out both;
+}
+
+.cursor-bobu-mouth {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" style="font-size: 24px"><text y="24">👄</text></svg>'), auto;
+}
