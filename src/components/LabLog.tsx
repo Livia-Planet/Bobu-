@@ -17,6 +17,8 @@ interface LabLogProps {
   setEquipment: React.Dispatch<React.SetStateAction<EquipmentState>>;
   newGachaItems: string[];
   setNewGachaItems: React.Dispatch<React.SetStateAction<string[]>>;
+  tutorialStep?: string;
+  setTutorialStep?: (step: any) => void;
 }
 
 export const PlanetVisual = ({ value, form, rarity, color }: { value: string | number, form: number, rarity: string, color: string }) => {
@@ -33,11 +35,12 @@ export const PlanetVisual = ({ value, form, rarity, color }: { value: string | n
   );
 };
 
-const FlipCard: React.FC<{ item: GachaItem, isUnlocked: boolean, isEquipped: boolean, onEquip: () => void, color: string, isNew: boolean, onRemoveNew: () => void, lang: Language, t: typeof translations['en'] }> = ({ item, isUnlocked, isEquipped, onEquip, color, isNew, onRemoveNew, lang, t }) => {
+const FlipCard: React.FC<{ item: GachaItem, isUnlocked: boolean, isEquipped: boolean, onEquip: () => void, color: string, isNew: boolean, onRemoveNew: () => void, lang: Language, t: typeof translations['en'], tutorialStep?: string }> = ({ item, isUnlocked, isEquipped, onEquip, color, isNew, onRemoveNew, lang, t, tutorialStep }) => {
   const [isFlipped, setIsFlipped] = useState(false);
+  const isTutorialTarget = tutorialStep === 'equip_item' && (item.rarity === 'UR' || item.rarity === 'SR');
 
   return (
-    <div className="flex flex-col items-center gap-3 w-full relative">
+    <div className={`flex flex-col items-center gap-3 w-full relative ${isTutorialTarget ? 'z-[1001] ring-4 ring-cyan-400 animate-pulse bg-white/10 rounded-2xl p-2' : ''}`}>
       {isNew && (
         <div className="absolute -top-2 -right-2 z-20 bg-red-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-md animate-bounce">
           NEW
@@ -111,7 +114,7 @@ const FlipCard: React.FC<{ item: GachaItem, isUnlocked: boolean, isEquipped: boo
   );
 };
 
-export const LabLog: React.FC<LabLogProps> = ({ gachaCollection, unlockedChains, unlockedPlanets, lang, isDarkMode, equipment, setEquipment, newGachaItems, setNewGachaItems }) => {
+export const LabLog: React.FC<LabLogProps> = ({ gachaCollection, unlockedChains, unlockedPlanets, lang, isDarkMode, equipment, setEquipment, newGachaItems, setNewGachaItems, tutorialStep, setTutorialStep }) => {
   const [toast, setToast] = useState<string | null>(null);
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'planets' | 'audio' | 'themes' | 'laws'>('planets');
@@ -410,7 +413,11 @@ export const LabLog: React.FC<LabLogProps> = ({ gachaCollection, unlockedChains,
                           ...prev,
                           tileSkins: { ...prev.tileSkins, [selectedPlanet]: skinId }
                         }));
+                        if (tutorialStep === 'equip_item' && setTutorialStep) {
+                          setTutorialStep('finished');
+                        }
                       }}
+                      tutorialStep={tutorialStep}
                     />
                   );
                 })}

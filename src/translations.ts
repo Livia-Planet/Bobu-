@@ -78,11 +78,12 @@ export const translations = {
       pioneerCert: "宇宙开拓者证明"
     },
     tutorial: {
+      skip: "跳过引导",
       welcomeTitle: "欢迎来到星体盒！",
       welcomeDesc: "滑动屏幕，让同样的星体相撞吧！探索未知的宇宙形态！",
       welcomeBtn: "开始实验",
       doubleTapCmt: "哇！是高维奇迹星！双击它，榨取它的金币！",
-      gachaPull: "金币够了！快点击左下角的扭蛋机，召唤新的实体潮玩！",
+      gachaPull: "金币够了！快点击左下角的扭蛋机，召唤实体潮玩！",
       equipItem: "打开下方的档案室，装备你刚抽到的战利品吧！"
     },
     labLog: {
@@ -240,12 +241,13 @@ export const translations = {
       pioneerCert: "Cosmic Pioneer Certificate"
     },
     tutorial: {
+      skip: "Skip Tutorial",
       welcomeTitle: "Welcome to AstroBox!",
       welcomeDesc: "Swipe the screen to collide identical stars! Explore unknown cosmic forms!",
       welcomeBtn: "Start Experiment",
       doubleTapCmt: "Wow! A high-dimensional Miracle Star! Double tap it to extract coins!",
-      gachaPull: "Enough coins! Tap the Gacha machine on the bottom left to summon new toys!",
-      equipItem: "Open the Lab Log below to equip your new loot!"
+      gachaPull: "Enough coins! Tap the Gacha machine to pull a toy!",
+      equipItem: "Open the Lab Log below and equip your new loot!"
     },
     labLog: {
       planets: {

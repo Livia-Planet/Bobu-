@@ -250,7 +250,7 @@ export const PlanetTile: React.FC<PlanetTileProps> = ({
         }
       }}
       className={`absolute w-[4.5rem] h-[4.5rem] rounded-3xl flex flex-col items-center justify-center transition-transform
-        ${isTutorialTarget ? 'z-[1000] ring-4 ring-yellow-400 ring-offset-4 ring-offset-black/60 shadow-[0_0_30px_rgba(250,204,21,0.8)]' : ''}
+        ${isTutorialTarget ? 'z-[1001] ring-4 ring-yellow-400 ring-offset-4 ring-offset-black/60 shadow-[0_0_30px_rgba(250,204,21,0.8)]' : ''}
         ${showInfoOverlay ? 'z-50' : 'z-10'}
         ${isHybrid ? 'bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 shadow-[0_10px_20px_rgba(168,85,247,0.3)]' : planet.color}
         ${isConflicting ? 'border-4 border-red-400 shadow-[0_0_20px_rgba(248,113,113,0.6)] animate-pulse' : ''}

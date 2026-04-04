@@ -7,20 +7,23 @@ interface TutorialOverlayProps {
   step: TutorialStep;
   lang: Language;
   onNext: () => void;
+  onSkip: () => void;
 }
 
-export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({ step, lang, onNext }) => {
+export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({ step, lang, onNext, onSkip }) => {
   const t = translations[lang].tutorial;
 
   if (step === 'finished' || step === 'merge_basics') return null;
 
+  const isFocusStep = step === 'double_tap_cmt' || step === 'gacha_pull' || step === 'equip_item';
+
   return (
-    <div className="fixed inset-0 z-[990] pointer-events-none flex flex-col items-center justify-center">
+    <div className={`fixed inset-0 z-[1000] flex flex-col items-center justify-center ${isFocusStep || step === 'welcome' ? 'pointer-events-auto' : 'pointer-events-none'}`}>
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className={`absolute inset-0 bg-black/60 backdrop-blur-sm ${step === 'welcome' ? 'pointer-events-auto' : 'pointer-events-none'}`}
+        className={`absolute inset-0 ${isFocusStep ? 'bg-black/75 backdrop-blur-sm' : 'bg-black/60 backdrop-blur-sm'}`}
       />
       
       <AnimatePresence mode="wait">
@@ -46,43 +49,24 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({ step, lang, on
           </motion.div>
         )}
 
-        {step === 'double_tap_cmt' && (
+        {isFocusStep && (
           <motion.div
-            key="double_tap_cmt"
+            key="focus_bubble"
             initial={{ scale: 0.8, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            className="absolute top-1/4 z-10 bg-white dark:bg-slate-800 p-6 rounded-3xl max-w-sm mx-4 shadow-2xl border-4 border-yellow-400 text-center pointer-events-none"
+            className="relative z-10 bg-white dark:bg-slate-800 p-6 rounded-3xl max-w-sm mx-4 shadow-2xl border-4 border-yellow-400 text-center pointer-events-auto"
           >
+            <button 
+              onClick={onSkip}
+              className="absolute -top-3 -right-3 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded-full px-3 py-1 text-xs font-bold shadow-md transition-colors"
+            >
+              {t.skip}
+            </button>
             <div className="text-4xl mb-2">✨</div>
             <p className="text-slate-800 dark:text-white font-black text-lg">
-              {t.doubleTapCmt}
-            </p>
-          </motion.div>
-        )}
-
-        {step === 'gacha_pull' && (
-          <motion.div
-            key="gacha_pull"
-            initial={{ scale: 0.8, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            className="absolute bottom-48 left-6 z-10 bg-white dark:bg-slate-800 p-4 rounded-2xl max-w-[200px] shadow-2xl border-4 border-pink-400 text-center pointer-events-none"
-          >
-            <div className="absolute -bottom-3 left-6 w-4 h-4 bg-white dark:bg-slate-800 border-b-4 border-r-4 border-pink-400 rotate-45"></div>
-            <p className="text-slate-800 dark:text-white font-black text-sm">
-              {t.gachaPull}
-            </p>
-          </motion.div>
-        )}
-
-        {step === 'equip_item' && (
-          <motion.div
-            key="equip_item"
-            initial={{ scale: 0.8, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            className="absolute bottom-24 z-10 bg-white dark:bg-slate-800 p-4 rounded-2xl max-w-xs mx-4 shadow-2xl border-4 border-cyan-400 text-center pointer-events-none"
-          >
-            <p className="text-slate-800 dark:text-white font-black text-sm">
-              {t.equipItem}
+              {step === 'double_tap_cmt' && t.doubleTapCmt}
+              {step === 'gacha_pull' && t.gachaPull}
+              {step === 'equip_item' && t.equipItem}
             </p>
           </motion.div>
         )}

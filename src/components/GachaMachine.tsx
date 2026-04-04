@@ -115,6 +115,9 @@ export const GachaMachine: React.FC<GachaMachineProps> = ({ plusCoins, setPlusCo
       soundEngine.playGachaReveal();
       setGachaCollection(prev => [...prev, pulled.id]);
       setNewGachaItems(prev => [...prev, pulled.id]);
+      if (tutorialStep === 'gacha_pull' && setTutorialStep) {
+        setTutorialStep('equip_item');
+      }
     }, 2500);
   };
 
