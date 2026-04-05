@@ -15,7 +15,7 @@ export const TutorialOverlay: React.FC<Props> = ({ step, setStep, lang }) => {
 
   if (step === 'welcome') {
     return (
-      <div className="fixed inset-0 z-[1000] flex items-center justify-center pointer-events-auto bg-black/75 backdrop-blur-sm">
+      <div className="absolute inset-0 z-[9999] flex items-center justify-center pointer-events-auto bg-black/75 backdrop-blur-sm">
         <motion.div 
           initial={{ scale: 0, opacity: 0, rotate: -10 }} 
           animate={{ scale: 1, opacity: 1, rotate: 0 }} 
@@ -40,7 +40,7 @@ export const TutorialOverlay: React.FC<Props> = ({ step, setStep, lang }) => {
 
   if (step === 'swipe_guide') {
     return (
-      <div className="fixed inset-0 z-[1000] pointer-events-none flex items-center justify-center bg-transparent mt-32">
+      <div className="absolute inset-0 z-[9999] pointer-events-none flex items-center justify-center bg-transparent mt-32">
         <motion.div
           animate={{ x: [-120, 120, -120] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}

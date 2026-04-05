@@ -374,21 +374,21 @@ export default function App() {
 
       {gameState === 'start_menu' && (
         <motion.div key="start_menu" exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.5 }}>
-          <StartScreen setGameState={setGameState} setLang={setLang} />
+          <StartScreen setGameState={setGameState} setLang={setLang} tutorialStep={tutorialStep} setTutorialStep={setTutorialStep} />
         </motion.div>
       )}
 
       {gameState === 'playing' && (
         <motion.div 
           key="playing"
-          initial={{ opacity: 0, scale: 0.9, y: 50 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          initial={{ scale: 0.5, y: 200, opacity: 0 }}
+          animate={{ scale: 1, y: 0, opacity: 1 }}
+          transition={{ type: "spring", damping: 12, stiffness: 200 }}
           className={`min-h-screen flex flex-col items-center pt-8 pb-32 px-4 font-sans overflow-hidden transition-colors duration-1000 relative
             ${getThemeClasses(equipment.boardTheme, isDarkMode)}
           `}
         >
-          <TutorialOverlay step={tutorialStep} setStep={setTutorialStep} lang={lang} setLang={setLang} />
+          <TutorialOverlay step={tutorialStep} setStep={setTutorialStep} lang={lang} />
           
           {isHitlag && <div className="fixed inset-0 z-40 bg-black/60 transition-opacity duration-75" />}
           
