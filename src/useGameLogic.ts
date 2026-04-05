@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { GridData, TileData, AttributeType, Toast, TutorialStep } from './types';
+import { GridData, TileData, AttributeType, Toast, TutorialStep, GameState } from './types';
 import { ATTRIBUTE_NAMES, EvolutionRecipes } from './constants';
 import { soundEngine, MelodySequencer } from './SoundEngine';
 
@@ -355,6 +355,17 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
 
   const [tutorialStep, setTutorialStep] = useState<TutorialStep>(() => (localStorage.getItem('bobu_tutorial') as TutorialStep) || 'lang_select');
   useEffect(() => { localStorage.setItem('bobu_tutorial', tutorialStep); }, [tutorialStep]);
+
+  const [gameState, setGameState] = useState<GameState>('loading');
+
+  useEffect(() => {
+    if (gameState === 'loading') {
+      const timer = setTimeout(() => {
+        setGameState('start_menu');
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [gameState]);
 
   useEffect(() => {
     localStorage.setItem('bobu_bestScore', bestScore.toString());
@@ -883,6 +894,6 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     grid, score, gameOver, message, dataExhaust, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, instability,
     isShaking, carrots, plusCoins, setPlusCoins, activeProp, conflictingIds, activeLaws, setConflictingIds, setActiveProp, useCarrot, boostTile, ascendTile,
     slide, resetGame, unlockedChains, activeFamilies, setActiveFamilies, goldenFlash, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile,
-    tutorialStep, setTutorialStep
+    tutorialStep, setTutorialStep, gameState, setGameState
   };
 };

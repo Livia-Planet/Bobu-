@@ -61,3 +61,5 @@ export interface EquipmentState {
 
 export type TutorialStep = 'lang_select' | 'welcome' | 'swipe_guide' | 'currency_intro' | 'double_tap_cmt' | 'gacha_pull' | 'equip_item' | 'finished';
 
+export type GameState = 'loading' | 'start_menu' | 'playing';
+

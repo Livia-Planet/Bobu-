@@ -12,6 +12,8 @@ import { BottomDrawer } from './components/BottomDrawer';
 import { GachaMachine } from './components/GachaMachine';
 import { PlanetVisual } from './components/LabLog';
 import { TutorialOverlay } from './components/TutorialOverlay';
+import { LoadingScreen } from './components/LoadingScreen';
+import { StartScreen } from './components/StartScreen';
 import { getHighestUnlockedForm } from './utils';
 import { translations, Language } from './translations';
 import { soundEngine } from './SoundEngine';
@@ -96,7 +98,7 @@ export default function App() {
     grid, score, gameOver, message, dataExhaust, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, instability,
     isShaking, carrots, plusCoins, setPlusCoins, activeProp, conflictingIds, activeLaws, setConflictingIds, setActiveProp, useCarrot, boostTile, ascendTile,
     slide, resetGame, goldenFlash, unlockedChains, activeFamilies, setActiveFamilies, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile,
-    tutorialStep, setTutorialStep
+    tutorialStep, setTutorialStep, gameState, setGameState
   } = useGameLogic(equipment.musicTracks);
 
   const handleToggleFamily = (family: string) => {
@@ -361,6 +363,14 @@ export default function App() {
       setIsGachaOpen(false);
     }
   }, [tutorialStep]);
+
+  if (gameState === 'loading') {
+    return <LoadingScreen />;
+  }
+
+  if (gameState === 'start_menu') {
+    return <StartScreen setGameState={setGameState} setLang={setLang} />;
+  }
 
   return (
     <div className={`min-h-screen flex flex-col items-center pt-8 pb-32 px-4 font-sans overflow-hidden transition-colors duration-1000 relative
