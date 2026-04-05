@@ -40,11 +40,11 @@ export const TutorialOverlay: React.FC<Props> = ({ step, setStep, lang }) => {
 
   if (step === 'swipe_guide') {
     return (
-      <div className="fixed inset-0 z-[1000] pointer-events-none flex items-center justify-center">
+      <div className="fixed inset-0 z-[1000] pointer-events-none flex items-center justify-center bg-transparent mt-32">
         <motion.div
-          animate={{ x: [-80, 80, -80] }}
+          animate={{ x: [-120, 120, -120] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-          className="text-8xl"
+          className="text-8xl pointer-events-none"
         >
           👇
         </motion.div>

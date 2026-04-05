@@ -364,24 +364,36 @@ export default function App() {
     }
   }, [tutorialStep]);
 
-  if (gameState === 'loading') {
-    return <LoadingScreen />;
-  }
-
-  if (gameState === 'start_menu') {
-    return <StartScreen setGameState={setGameState} setLang={setLang} />;
-  }
-
   return (
-    <div className={`min-h-screen flex flex-col items-center pt-8 pb-32 px-4 font-sans overflow-hidden transition-colors duration-1000 relative
-      ${getThemeClasses(equipment.boardTheme, isDarkMode)}
-    `}>
-      <TutorialOverlay step={tutorialStep} setStep={setTutorialStep} lang={lang} setLang={setLang} />
-      
-      {isHitlag && <div className="fixed inset-0 z-40 bg-black/60 transition-opacity duration-75" />}
-      
-      {/* 顶部控制栏 */}
-      <div className="absolute top-4 right-4 flex items-center gap-3 z-50">
+    <AnimatePresence mode="wait">
+      {gameState === 'loading' && (
+        <motion.div key="loading" exit={{ opacity: 0, scale: 1.1 }} transition={{ duration: 0.5 }}>
+          <LoadingScreen />
+        </motion.div>
+      )}
+
+      {gameState === 'start_menu' && (
+        <motion.div key="start_menu" exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.5 }}>
+          <StartScreen setGameState={setGameState} setLang={setLang} />
+        </motion.div>
+      )}
+
+      {gameState === 'playing' && (
+        <motion.div 
+          key="playing"
+          initial={{ opacity: 0, scale: 0.9, y: 50 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className={`min-h-screen flex flex-col items-center pt-8 pb-32 px-4 font-sans overflow-hidden transition-colors duration-1000 relative
+            ${getThemeClasses(equipment.boardTheme, isDarkMode)}
+          `}
+        >
+          <TutorialOverlay step={tutorialStep} setStep={setTutorialStep} lang={lang} setLang={setLang} />
+          
+          {isHitlag && <div className="fixed inset-0 z-40 bg-black/60 transition-opacity duration-75" />}
+          
+          {/* 顶部控制栏 */}
+          <div className="absolute top-4 right-4 flex items-center gap-3 z-50">
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={handleToggleLang}
@@ -920,7 +932,8 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
-
-    </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
