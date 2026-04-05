@@ -209,9 +209,7 @@ const moveLeft = (grid: GridData, activeLaws: string[] = [], unlockedChainsCount
             attributeName: null,
             level: newValue
           };
-          if (tutorialStep === 'merge_basics') {
-            setTutorialStep('double_tap_cmt');
-          }
+          if (tutorialStep === 'merge_basics') setTutorialStep('double_tap_cmt');
         } else {
           // 正常合并
           comboCount++;
@@ -355,14 +353,8 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     return initialChains;
   });
 
-  const [tutorialStep, setTutorialStep] = useState<TutorialStep>(() => {
-    const saved = localStorage.getItem('bobu_tutorial');
-    return (saved as TutorialStep) || 'welcome';
-  });
-
-  useEffect(() => {
-    localStorage.setItem('bobu_tutorial', tutorialStep);
-  }, [tutorialStep]);
+  const [tutorialStep, setTutorialStep] = useState<TutorialStep>(() => (localStorage.getItem('bobu_tutorial') as TutorialStep) || 'welcome');
+  useEffect(() => { localStorage.setItem('bobu_tutorial', tutorialStep); }, [tutorialStep]);
 
   useEffect(() => {
     localStorage.setItem('bobu_bestScore', bestScore.toString());

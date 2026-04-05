@@ -77,15 +77,7 @@ export const translations = {
       medalOfPride: "Bobu 的骄傲勋章",
       pioneerCert: "宇宙开拓者证明"
     },
-    tutorial: {
-      skip: "跳过引导",
-      welcomeTitle: "欢迎来到星体盒！",
-      welcomeDesc: "滑动屏幕，让同样的星体相撞吧！探索未知的宇宙形态！",
-      welcomeBtn: "开始实验",
-      doubleTapCmt: "哇！是高维奇迹星！双击它，榨取它的金币！",
-      gachaPull: "金币够了！快点击左下角的扭蛋机，召唤实体潮玩！",
-      equipItem: "打开下方的档案室，装备你刚抽到的战利品吧！"
-    },
+    tutorial: { skip: "跳过引导", welcome: "欢迎来到星体盒！滑动屏幕，让同样的星体相撞吧！", double_tap_cmt: "哇！是高维奇迹星！双击它，榨取它的金币！", gacha_pull: "金币够了！快点击左下角的扭蛋机，召唤实体潮玩！", equip_item: "打开下方的档案室，装备你刚抽到的战利品吧！" },
     labLog: {
       planets: {
         '2': { name: "星尘微粒", desc: "Bobu打喷嚏崩出来的发光小渣渣，虽然小，但它是整个宇宙的起点哦！" },
@@ -240,15 +232,7 @@ export const translations = {
       medalOfPride: "Bobu's Medal of Pride",
       pioneerCert: "Cosmic Pioneer Certificate"
     },
-    tutorial: {
-      skip: "Skip Tutorial",
-      welcomeTitle: "Welcome to AstroBox!",
-      welcomeDesc: "Swipe the screen to collide identical stars! Explore unknown cosmic forms!",
-      welcomeBtn: "Start Experiment",
-      doubleTapCmt: "Wow! A high-dimensional Miracle Star! Double tap it to extract coins!",
-      gachaPull: "Enough coins! Tap the Gacha machine to pull a toy!",
-      equipItem: "Open the Lab Log below and equip your new loot!"
-    },
+    tutorial: { skip: "Skip Tutorial", welcome: "Welcome! Swipe to merge identical stars!", double_tap_cmt: "A Miracle Star! Double tap it to extract coins!", gacha_pull: "Enough coins! Tap the Gacha machine to pull a toy!", equip_item: "Open the Lab Log below and equip your new loot!" },
     labLog: {
       planets: {
         '2': { name: "Stardust", desc: "A glowing speck from Bobu's sneeze. Small, but it's the start of the universe!" },

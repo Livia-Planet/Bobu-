@@ -1,75 +1,20 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { TutorialStep } from '../types';
 import { translations, Language } from '../translations';
 
-interface TutorialOverlayProps {
-  step: TutorialStep;
-  setStep: (step: TutorialStep) => void;
-  lang: Language;
-}
+interface Props { step: TutorialStep; setStep: (s: TutorialStep) => void; lang: Language; }
 
-export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({ step, setStep, lang }) => {
-  const t = translations[lang].tutorial;
-
+export const TutorialOverlay: React.FC<Props> = ({ step, setStep, lang }) => {
   if (step === 'finished' || step === 'merge_basics') return null;
-
-  const isFocusStep = step === 'double_tap_cmt' || step === 'gacha_pull' || step === 'equip_item';
-
+  const t = translations[lang].tutorial;
   return (
-    <div className={`fixed inset-0 z-[1000] flex flex-col items-center justify-center ${isFocusStep || step === 'welcome' ? 'pointer-events-auto' : 'pointer-events-none'}`}>
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className={`absolute inset-0 ${isFocusStep ? 'bg-black/75 backdrop-blur-sm' : 'bg-black/60 backdrop-blur-sm'}`}
-      />
-      
-      <AnimatePresence mode="wait">
-        {step === 'welcome' && (
-          <motion.div
-            key="welcome"
-            initial={{ scale: 0.8, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.8, opacity: 0, y: -20 }}
-            className="relative z-10 bg-white dark:bg-slate-800 p-8 rounded-3xl max-w-sm mx-4 shadow-2xl border-4 border-indigo-500 text-center pointer-events-auto"
-          >
-            <div className="text-6xl mb-4">👋</div>
-            <h2 className="text-2xl font-black mb-4 text-slate-800 dark:text-white">{t.welcomeTitle}</h2>
-            <p className="text-slate-600 dark:text-slate-300 font-bold mb-8 leading-relaxed">
-              {t.welcomeDesc}
-            </p>
-            <button
-              onClick={() => setStep('merge_basics')}
-              className="w-full py-4 bg-indigo-500 hover:bg-indigo-600 text-white rounded-2xl font-black text-xl shadow-[0_6px_0_#4f46e5] active:shadow-[0_0px_0_#4f46e5] active:translate-y-1.5 transition-all"
-            >
-              {t.welcomeBtn}
-            </button>
-          </motion.div>
-        )}
-
-        {isFocusStep && (
-          <motion.div
-            key="focus_bubble"
-            initial={{ scale: 0.8, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            className="relative z-10 bg-white dark:bg-slate-800 p-6 rounded-3xl max-w-sm mx-4 shadow-2xl border-4 border-yellow-400 text-center pointer-events-auto"
-          >
-            <button 
-              onClick={() => setStep('finished')}
-              className="absolute -top-3 -right-3 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded-full px-3 py-1 text-xs font-bold shadow-md transition-colors"
-            >
-              {t.skip}
-            </button>
-            <div className="text-4xl mb-2">✨</div>
-            <p className="text-slate-800 dark:text-white font-black text-lg">
-              {step === 'double_tap_cmt' && t.doubleTapCmt}
-              {step === 'gacha_pull' && t.gachaPull}
-              {step === 'equip_item' && t.equipItem}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center pointer-events-auto bg-black/75 backdrop-blur-sm">
+      <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative bg-white p-6 rounded-3xl max-w-sm w-full mx-4 shadow-2xl">
+        <button onClick={() => setStep('finished')} className="absolute top-4 right-4 text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full hover:bg-slate-200">{t.skip}</button>
+        <p className="text-lg font-black text-slate-800 mt-4 text-center">{t[step as keyof typeof t]}</p>
+        {step === 'welcome' && <button onClick={() => setStep('merge_basics')} className="mt-6 w-full bg-indigo-500 text-white py-3 rounded-xl font-bold">开始实验</button>}
+      </motion.div>
     </div>
   );
 };
