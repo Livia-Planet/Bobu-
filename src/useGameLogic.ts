@@ -353,7 +353,7 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     return initialChains;
   });
 
-  const [tutorialStep, setTutorialStep] = useState<TutorialStep>(() => (localStorage.getItem('bobu_tutorial') as TutorialStep) || 'welcome');
+  const [tutorialStep, setTutorialStep] = useState<TutorialStep>(() => (localStorage.getItem('bobu_tutorial') as TutorialStep) || 'lang_select');
   useEffect(() => { localStorage.setItem('bobu_tutorial', tutorialStep); }, [tutorialStep]);
 
   useEffect(() => {
@@ -669,6 +669,9 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     }
 
     if (result.moved) {
+      if (tutorialStep === 'swipe_guide' && result.comboCount > 0) {
+        setTutorialStep('currency_intro');
+      }
       setLastMoveDir(direction);
       let nextGrid = result.newGrid;
       let slideScore = result.score;

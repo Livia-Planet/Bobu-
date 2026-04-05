@@ -19,11 +19,11 @@ export const BottomDrawer = ({ gachaCollection, unlockedChains, unlockedPlanets,
   return (
     <>
       {/* Handle */}
-      <div className={`fixed bottom-0 left-0 right-0 flex justify-center pb-4 pointer-events-none ${tutorialStep === 'equip_item' ? 'z-[1001]' : 'z-40'}`}>
+      <div className="fixed bottom-0 left-0 right-0 flex justify-center pb-4 pointer-events-none z-40">
         <motion.button
           className={`pointer-events-auto px-6 py-3 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.05)] border font-bold flex items-center gap-2 backdrop-blur-md
             ${isDarkMode ? 'bg-indigo-900/80 border-indigo-500/30 text-indigo-200' : 'bg-white/80 border-white/50 text-slate-600'}
-            ${tutorialStep === 'equip_item' ? 'relative ring-4 ring-cyan-400 animate-pulse' : ''}
+            ${tutorialStep === 'equip_item' ? 'z-[1001] relative ring-4 ring-cyan-400 animate-pulse' : ''}
           `}
           onClick={() => {
             soundEngine.playClick();

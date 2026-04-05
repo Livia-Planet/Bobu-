@@ -366,7 +366,7 @@ export default function App() {
     <div className={`min-h-screen flex flex-col items-center pt-8 pb-32 px-4 font-sans overflow-hidden transition-colors duration-1000 relative
       ${getThemeClasses(equipment.boardTheme, isDarkMode)}
     `}>
-      <TutorialOverlay step={tutorialStep} setStep={setTutorialStep} lang={lang} />
+      <TutorialOverlay step={tutorialStep} setStep={setTutorialStep} lang={lang} setLang={setLang} />
       
       {isHitlag && <div className="fixed inset-0 z-40 bg-black/60 transition-opacity duration-75" />}
       
@@ -764,7 +764,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* Gacha Capsule Button (Left) */}
-      <div className={`fixed bottom-24 left-6 ${tutorialStep === 'gacha_pull' ? 'z-[1001]' : 'z-40'}`}>
+      <div className="fixed bottom-24 left-6 z-40">
         <motion.button
           animate={{ y: [0, -8, 0], rotate: [-5, 5, -5] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
@@ -774,7 +774,7 @@ export default function App() {
             setIsGachaOpen(true);
           }}
           className={`relative w-16 h-20 flex flex-col items-center justify-center shadow-[0_10px_20px_rgba(0,0,0,0.2)] rounded-full overflow-hidden border-4 border-white cursor-pointer
-            ${tutorialStep === 'gacha_pull' ? 'ring-4 ring-pink-400 animate-pulse bg-white' : ''}
+            ${tutorialStep === 'gacha_pull' ? 'z-[1001] relative ring-4 ring-pink-400 animate-pulse bg-white' : ''}
           `}
         >
           <div className="w-full h-1/2 bg-red-500 border-b-4 border-slate-800/20"></div>
