@@ -98,7 +98,7 @@ export default function App() {
     grid, score, gameOver, message, dataExhaust, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, instability,
     isShaking, carrots, plusCoins, setPlusCoins, activeProp, conflictingIds, activeLaws, setConflictingIds, setActiveProp, useCarrot, boostTile, ascendTile,
     slide, resetGame, goldenFlash, unlockedChains, activeFamilies, setActiveFamilies, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile,
-    tutorialStep, setTutorialStep, gameState, setGameState
+    tutorialStep, setTutorialStep, finishTutorial, gameState, setGameState
   } = useGameLogic(equipment.musicTracks);
 
   const handleToggleFamily = (family: string) => {
@@ -388,7 +388,7 @@ export default function App() {
             ${getThemeClasses(equipment.boardTheme, isDarkMode)}
           `}
         >
-          <TutorialOverlay step={tutorialStep} setStep={setTutorialStep} lang={lang} />
+          <TutorialOverlay step={tutorialStep} finishTutorial={finishTutorial} lang={lang} />
           
           {isHitlag && <div className="fixed inset-0 z-40 bg-black/60 transition-opacity duration-75" />}
           
@@ -617,7 +617,10 @@ export default function App() {
                   lastMoveDir={lastMoveDir}
                   t={t}
                   onTileClick={handleTileClick}
-                  onAscend={ascendTile}
+                  onAscend={(r, c) => {
+                    ascendTile(r, c);
+                    finishTutorial('double_tap_cmt');
+                  }}
                   onBoost={boostTile}
                   equipment={equipment}
                   showInfoOverlay={activeInfoId === tile.id}
@@ -896,6 +899,7 @@ export default function App() {
         setNewGachaItems={setNewGachaItems}
         tutorialStep={tutorialStep}
         setTutorialStep={setTutorialStep}
+        finishTutorial={finishTutorial}
       />
 
       {/* Gacha Machine Overlay */}
@@ -928,6 +932,7 @@ export default function App() {
               lang={lang}
               tutorialStep={tutorialStep}
               setTutorialStep={setTutorialStep}
+              finishTutorial={finishTutorial}
             />
           </motion.div>
         )}

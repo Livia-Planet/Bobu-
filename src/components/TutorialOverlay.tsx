@@ -5,15 +5,15 @@ import { translations, Language } from '../translations';
 
 interface Props { 
   step: TutorialStep; 
-  setStep: (s: TutorialStep) => void; 
+  finishTutorial: (step: string) => void; 
   lang: Language; 
 }
 
-export const TutorialOverlay: React.FC<Props> = ({ step, setStep, lang }) => {
-  if (!step || step === 'finished') return null;
+export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang }) => {
   const t = translations[lang].tutorial;
 
   const getBubbleConfig = () => {
+    if (!step || step === 'finished') return null;
     switch (step) {
       case 'welcome':
       case 'swipe_guide':
@@ -58,54 +58,55 @@ export const TutorialOverlay: React.FC<Props> = ({ step, setStep, lang }) => {
   };
 
   const config = getBubbleConfig();
-  if (!config) return null;
 
   return (
     <div className="absolute inset-0 z-[9999] pointer-events-none overflow-hidden">
       <AnimatePresence mode="wait">
-        <motion.div
-          key={step}
-          initial={{ scale: 0, opacity: 0, y: 20 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0, opacity: 0, y: -20 }}
-          transition={{ type: "spring", bounce: 0.5 }}
-          className={`absolute ${config.position} max-w-[280px] w-max`}
-        >
+        {config && (
           <motion.div
-            animate={config.animation}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-            className={`relative p-4 rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.2)] flex items-center gap-3 ${config.color} border-2 border-black/5`}
+            key={step}
+            initial={{ scale: 0, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0, opacity: 0, y: -20 }}
+            transition={{ type: "spring", bounce: 0.5 }}
+            className={`absolute ${config.position} max-w-[280px] w-max`}
           >
-            {/* Icon */}
             <motion.div
-              animate={step === 'welcome' || step === 'swipe_guide' ? { rotate: [-15, 15, -15] } : {}}
-              transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-              className="text-3xl shrink-0"
+              animate={config.animation}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              className={`relative p-4 rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.2)] flex items-center gap-3 ${config.color} border-2 border-black/5`}
             >
-              {config.icon}
+              {/* Icon */}
+              <motion.div
+                animate={step === 'welcome' || step === 'swipe_guide' ? { rotate: [-15, 15, -15] } : {}}
+                transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                className="text-3xl shrink-0"
+              >
+                {config.icon}
+              </motion.div>
+
+              {/* Text */}
+              <p className="font-bold text-sm leading-snug">
+                {config.text}
+              </p>
+
+              {/* Tail */}
+              <div className={`absolute w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[12px] ${config.tailClass}`} />
             </motion.div>
 
-            {/* Text */}
-            <p className="font-bold text-sm leading-snug">
-              {config.text}
-            </p>
-
-            {/* Tail */}
-            <div className={`absolute w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[12px] ${config.tailClass}`} />
+            {/* Skip Button (only for welcome/swipe) */}
+            {(step === 'welcome' || step === 'swipe_guide') && (
+              <div className="mt-4 flex justify-center">
+                <button
+                  onClick={() => finishTutorial(step as string)}
+                  className="pointer-events-auto bg-black/20 hover:bg-black/30 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-colors"
+                >
+                  {t.skip}
+                </button>
+              </div>
+            )}
           </motion.div>
-
-          {/* Skip Button (only for welcome/swipe) */}
-          {(step === 'welcome' || step === 'swipe_guide') && (
-            <div className="mt-4 flex justify-center">
-              <button
-                onClick={() => setStep(null)}
-                className="pointer-events-auto bg-black/20 hover:bg-black/30 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-colors"
-              >
-                {t.skip}
-              </button>
-            </div>
-          )}
-        </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );

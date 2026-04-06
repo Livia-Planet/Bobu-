@@ -953,10 +953,17 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [slide, gameOver, instability]);
 
+  const finishTutorial = useCallback((step: string) => {
+    if (tutorialStep === step) {
+      setTutorialStep(null);
+    }
+    markTutorialCompleted(step);
+  }, [tutorialStep, markTutorialCompleted]);
+
   return { 
     grid, score, gameOver, message, dataExhaust, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, instability,
     isShaking, carrots, plusCoins, setPlusCoins, activeProp, conflictingIds, activeLaws, setConflictingIds, setActiveProp, useCarrot, boostTile, ascendTile,
     slide, resetGame, unlockedChains, activeFamilies, setActiveFamilies, goldenFlash, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile,
-    tutorialStep, setTutorialStep, gameState, setGameState
+    tutorialStep, setTutorialStep, finishTutorial, gameState, setGameState
   };
 };

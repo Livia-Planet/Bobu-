@@ -44,11 +44,12 @@ interface GachaMachineProps {
   setNewGachaItems: React.Dispatch<React.SetStateAction<string[]>>;
   isDarkMode: boolean;
   lang: Language;
-  tutorialStep?: string;
+  tutorialStep?: string | null;
   setTutorialStep?: (step: any) => void;
+  finishTutorial?: (step: string) => void;
 }
 
-export const GachaMachine: React.FC<GachaMachineProps> = ({ plusCoins, setPlusCoins, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, isDarkMode, lang, tutorialStep, setTutorialStep }) => {
+export const GachaMachine: React.FC<GachaMachineProps> = ({ plusCoins, setPlusCoins, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, isDarkMode, lang, tutorialStep, setTutorialStep, finishTutorial }) => {
   const [pullStage, setPullSequence] = useState<'idle' | 'churning' | 'flash' | 'speedlines' | 'reveal'>('idle');
   const [pulledItem, setPulledItem] = useState<GachaItem | null>(null);
   const [pullRarity, setPullRarity] = useState<'N' | 'R' | 'SR' | 'UR' | null>(null);
@@ -115,8 +116,8 @@ export const GachaMachine: React.FC<GachaMachineProps> = ({ plusCoins, setPlusCo
       soundEngine.playGachaReveal();
       setGachaCollection(prev => [...prev, pulled.id]);
       setNewGachaItems(prev => [...prev, pulled.id]);
-      if (tutorialStep === 'gacha_pull' && setTutorialStep) {
-        setTutorialStep('equip_item');
+      if (tutorialStep === 'gacha_pull' && finishTutorial) {
+        finishTutorial('gacha_pull');
       }
     }, 2500);
   };

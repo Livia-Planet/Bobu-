@@ -5,7 +5,7 @@ import { LabLog } from './LabLog';
 import { translations, Language } from '../translations';
 import { soundEngine } from '../SoundEngine';
 
-export const BottomDrawer = ({ gachaCollection, unlockedChains, unlockedPlanets, bestScore, lifetimeScore, lang, isDarkMode, equipment, setEquipment, newGachaItems, setNewGachaItems, tutorialStep, setTutorialStep }: any) => {
+export const BottomDrawer = ({ gachaCollection, unlockedChains, unlockedPlanets, bestScore, lifetimeScore, lang, isDarkMode, equipment, setEquipment, newGachaItems, setNewGachaItems, tutorialStep, setTutorialStep, finishTutorial }: any) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'log' | 'leaderboard'>('log');
   const t = translations[lang as Language];
@@ -84,7 +84,7 @@ export const BottomDrawer = ({ gachaCollection, unlockedChains, unlockedPlanets,
 
               <div className="flex-1 overflow-y-auto p-6 pb-24">
                 {activeTab === 'log' ? (
-                  <LabLog gachaCollection={gachaCollection} unlockedChains={unlockedChains} unlockedPlanets={unlockedPlanets} lang={lang} isDarkMode={isDarkMode} equipment={equipment} setEquipment={setEquipment} newGachaItems={newGachaItems} setNewGachaItems={setNewGachaItems} tutorialStep={tutorialStep} setTutorialStep={setTutorialStep} />
+                  <LabLog gachaCollection={gachaCollection} unlockedChains={unlockedChains} unlockedPlanets={unlockedPlanets} lang={lang} isDarkMode={isDarkMode} equipment={equipment} setEquipment={setEquipment} newGachaItems={newGachaItems} setNewGachaItems={setNewGachaItems} tutorialStep={tutorialStep} setTutorialStep={setTutorialStep} finishTutorial={finishTutorial} />
                 ) : (
                   <Leaderboard bestScore={bestScore} lifetimeScore={lifetimeScore} lang={lang} isDarkMode={isDarkMode} />
                 )}
