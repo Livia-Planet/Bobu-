@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { TutorialStep } from '../types';
 import { translations, Language } from '../translations';
 
@@ -10,47 +10,103 @@ interface Props {
 }
 
 export const TutorialOverlay: React.FC<Props> = ({ step, setStep, lang }) => {
-  if (step === 'finished' || step === 'lang_select') return null;
+  if (!step || step === 'finished') return null;
   const t = translations[lang].tutorial;
 
-  if (step === 'welcome') {
-    return (
-      <div className="absolute inset-0 z-[9999] flex items-center justify-center pointer-events-auto bg-black/75 backdrop-blur-sm">
-        <motion.div 
-          initial={{ scale: 0, opacity: 0, rotate: -10 }} 
-          animate={{ scale: 1, opacity: 1, rotate: 0 }} 
-          transition={{ type: "spring", stiffness: 300, damping: 15 }}
-          className="relative bg-white p-8 rounded-3xl max-w-sm w-full mx-4 shadow-2xl pointer-events-auto"
-        >
-          <div className="text-6xl text-center mb-4">👋</div>
-          <p className="text-2xl font-black text-slate-800 text-center leading-relaxed">{t.welcome}</p>
-          
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setStep('swipe_guide')} 
-            className="mt-8 w-full bg-indigo-500 text-white py-4 rounded-2xl font-black text-xl shadow-[0_6px_0_#4f46e5] active:shadow-none active:translate-y-1.5 transition-all"
-          >
-            {lang === 'zh' ? '开始实验' : 'Start'}
-          </motion.button>
-        </motion.div>
-      </div>
-    );
-  }
+  const getBubbleConfig = () => {
+    switch (step) {
+      case 'welcome':
+      case 'swipe_guide':
+        return {
+          text: step === 'welcome' ? t.welcome : t.swipe_guide,
+          position: 'top-32 left-1/2 -translate-x-1/2',
+          tailClass: 'bottom-[-10px] left-1/2 -translate-x-1/2 border-t-white',
+          icon: '📱',
+          color: 'bg-white text-slate-800',
+          animation: { y: [-5, 5, -5] }
+        };
+      case 'double_tap_cmt':
+        return {
+          text: t.double_tap_cmt,
+          position: 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
+          tailClass: 'hidden',
+          icon: '✨',
+          color: 'bg-yellow-400 text-yellow-900',
+          animation: { y: [-5, 5, -5], scale: [1, 1.05, 1] }
+        };
+      case 'gacha_pull':
+        return {
+          text: t.gacha_pull,
+          position: 'bottom-32 left-4',
+          tailClass: 'bottom-[-10px] left-8 border-t-white',
+          icon: '🎰',
+          color: 'bg-white text-slate-800',
+          animation: { y: [-5, 5, -5] }
+        };
+      case 'equip_item':
+        return {
+          text: t.equip_item,
+          position: 'bottom-32 left-1/2 -translate-x-1/2',
+          tailClass: 'bottom-[-10px] left-1/2 -translate-x-1/2 border-t-white',
+          icon: '🎒',
+          color: 'bg-white text-slate-800',
+          animation: { y: [-5, 5, -5] }
+        };
+      default:
+        return null;
+    }
+  };
 
-  if (step === 'swipe_guide') {
-    return (
-      <div className="absolute inset-0 z-[9999] pointer-events-none flex items-center justify-center bg-transparent mt-32">
+  const config = getBubbleConfig();
+  if (!config) return null;
+
+  return (
+    <div className="absolute inset-0 z-[9999] pointer-events-none overflow-hidden">
+      <AnimatePresence mode="wait">
         <motion.div
-          animate={{ x: [-120, 120, -120] }}
-          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-          className="text-8xl pointer-events-none"
+          key={step}
+          initial={{ scale: 0, opacity: 0, y: 20 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0, opacity: 0, y: -20 }}
+          transition={{ type: "spring", bounce: 0.5 }}
+          className={`absolute ${config.position} max-w-[280px] w-max`}
         >
-          👇
-        </motion.div>
-      </div>
-    );
-  }
+          <motion.div
+            animate={config.animation}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            className={`relative p-4 rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.2)] flex items-center gap-3 ${config.color} border-2 border-black/5`}
+          >
+            {/* Icon */}
+            <motion.div
+              animate={step === 'welcome' || step === 'swipe_guide' ? { rotate: [-15, 15, -15] } : {}}
+              transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+              className="text-3xl shrink-0"
+            >
+              {config.icon}
+            </motion.div>
 
-  return null;
+            {/* Text */}
+            <p className="font-bold text-sm leading-snug">
+              {config.text}
+            </p>
+
+            {/* Tail */}
+            <div className={`absolute w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[12px] ${config.tailClass}`} />
+          </motion.div>
+
+          {/* Skip Button (only for welcome/swipe) */}
+          {(step === 'welcome' || step === 'swipe_guide') && (
+            <div className="mt-4 flex justify-center">
+              <button
+                onClick={() => setStep(null)}
+                className="pointer-events-auto bg-black/20 hover:bg-black/30 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-colors"
+              >
+                {t.skip}
+              </button>
+            </div>
+          )}
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
 };

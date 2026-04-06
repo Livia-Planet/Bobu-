@@ -353,8 +353,26 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     return initialChains;
   });
 
-  const [tutorialStep, setTutorialStep] = useState<TutorialStep>(() => (localStorage.getItem('bobu_tutorial') as TutorialStep) || 'lang_select');
-  useEffect(() => { localStorage.setItem('bobu_tutorial', tutorialStep); }, [tutorialStep]);
+  const [tutorialStep, setTutorialStep] = useState<TutorialStep>(() => {
+    const saved = localStorage.getItem('bobu_tutorial');
+    if (saved === 'lang_select') return 'welcome'; // Migrate old state
+    return (saved as TutorialStep) || 'welcome';
+  });
+  
+  const [completedTutorials, setCompletedTutorials] = useState<string[]>(() => {
+    const saved = localStorage.getItem('bobu_completed_tutorials');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => { localStorage.setItem('bobu_tutorial', tutorialStep || ''); }, [tutorialStep]);
+  useEffect(() => { localStorage.setItem('bobu_completed_tutorials', JSON.stringify(completedTutorials)); }, [completedTutorials]);
+
+  const markTutorialCompleted = useCallback((step: string) => {
+    setCompletedTutorials(prev => {
+      if (!prev.includes(step)) return [...prev, step];
+      return prev;
+    });
+  }, []);
 
   const [gameState, setGameState] = useState<GameState>('loading');
 
@@ -861,6 +879,51 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
       setInstability(prev => Math.min(100, prev + 2));
     }
   }, [grid, activeLaws, checkCornerBonus, instability, unlockedChains, activeFamilies, unlockedPlanets, tutorialStep]);
+
+  // JIT Tutorial Triggers
+  useEffect(() => {
+    if (gameState !== 'playing') return;
+
+    // swipe_guide end
+    if (tutorialStep === 'swipe_guide' && score > 0) {
+      setTutorialStep(null);
+      markTutorialCompleted('swipe_guide');
+    }
+
+    // double_tap_cmt trigger
+    if (!completedTutorials.includes('double_tap_cmt') && tutorialStep !== 'double_tap_cmt') {
+      let hasCMT = false;
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          if (grid[r][c]?.attributeType === 'CMT') {
+            hasCMT = true;
+            break;
+          }
+        }
+      }
+      if (hasCMT) {
+        setTutorialStep('double_tap_cmt');
+        markTutorialCompleted('double_tap_cmt');
+      }
+    }
+
+    // gacha_pull trigger
+    if (!completedTutorials.includes('gacha_pull') && tutorialStep !== 'gacha_pull') {
+      if (plusCoins >= 100 && gachaCollection.length === 0) {
+        setTutorialStep('gacha_pull');
+        markTutorialCompleted('gacha_pull');
+      }
+    }
+
+    // equip_item trigger
+    if (!completedTutorials.includes('equip_item') && tutorialStep !== 'equip_item') {
+      if (newGachaItems.length > 0) {
+        setTutorialStep('equip_item');
+        markTutorialCompleted('equip_item');
+      }
+    }
+
+  }, [grid, score, plusCoins, newGachaItems, tutorialStep, completedTutorials, markTutorialCompleted, gameState]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
