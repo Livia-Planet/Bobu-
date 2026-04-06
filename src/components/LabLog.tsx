@@ -414,9 +414,6 @@ export const LabLog: React.FC<LabLogProps> = ({ gachaCollection, unlockedChains,
                           ...prev,
                           tileSkins: { ...prev.tileSkins, [selectedPlanet]: skinId }
                         }));
-                        if (tutorialStep === 'equip_item' && finishTutorial) {
-                          finishTutorial('equip_item');
-                        }
                       }}
                       tutorialStep={tutorialStep}
                     />

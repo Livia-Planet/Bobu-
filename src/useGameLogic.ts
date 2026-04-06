@@ -209,7 +209,6 @@ const moveLeft = (grid: GridData, activeLaws: string[] = [], unlockedChainsCount
             attributeName: null,
             level: newValue
           };
-          if (tutorialStep === 'merge_basics') setTutorialStep('double_tap_cmt');
         } else {
           // 正常合并
           comboCount++;
@@ -590,16 +589,6 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
       newGrid[r][c] = null;
       return newGrid;
     });
-
-    if (tutorialStep === 'double_tap_cmt') {
-      setPlusCoins(p => {
-        const next = Math.max(p, 5);
-        if (next >= 5) {
-          setTutorialStep('gacha_pull');
-        }
-        return next;
-      });
-    }
   }, [grid, activeLaws, addScore, tutorialStep]);
 
   const useCarrot = useCallback((r: number, c: number) => {
@@ -698,7 +687,7 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     }
 
     if (result.moved) {
-      if (tutorialStep === 'swipe_guide' && result.comboCount > 0) {
+      if ((tutorialStep === 'swipe_guide' || tutorialStep === 'welcome') && result.comboCount > 0) {
         setTutorialStep('currency_intro');
       }
       setLastMoveDir(direction);
@@ -885,9 +874,10 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     if (gameState !== 'playing') return;
 
     // swipe_guide end
-    if (tutorialStep === 'swipe_guide' && score > 0) {
-      setTutorialStep(null);
+    if ((tutorialStep === 'swipe_guide' || tutorialStep === 'welcome') && score > 0) {
+      setTutorialStep('currency_intro');
       markTutorialCompleted('swipe_guide');
+      markTutorialCompleted('welcome');
     }
 
     // double_tap_cmt trigger
@@ -909,7 +899,7 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
 
     // gacha_pull trigger
     if (!completedTutorials.includes('gacha_pull') && tutorialStep !== 'gacha_pull') {
-      if (plusCoins >= 100 && gachaCollection.length === 0) {
+      if (plusCoins >= 5 && gachaCollection.length === 0) {
         setTutorialStep('gacha_pull');
         markTutorialCompleted('gacha_pull');
       }

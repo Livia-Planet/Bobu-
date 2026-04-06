@@ -23,7 +23,23 @@ export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang })
           tailClass: 'bottom-[-10px] left-1/2 -translate-x-1/2 border-t-white',
           icon: '📱',
           color: 'bg-white text-slate-800',
-          animation: { y: [-5, 5, -5] }
+          animation: { y: [-5, 5, -5] },
+          showHand: true,
+          handIcon: '👆',
+          handAnimation: { x: [-30, 30, -30] },
+          handPosition: 'top-[120%] left-1/2 -translate-x-1/2',
+          clickable: false
+        };
+      case 'currency_intro':
+        return {
+          text: t.currency_intro,
+          position: 'top-20 right-4',
+          tailClass: 'top-[-10px] right-8 border-b-white rotate-180',
+          icon: '🪙',
+          color: 'bg-white text-slate-800',
+          animation: { y: [-5, 5, -5] },
+          showHand: false,
+          clickable: true
         };
       case 'double_tap_cmt':
         return {
@@ -32,25 +48,40 @@ export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang })
           tailClass: 'hidden',
           icon: '✨',
           color: 'bg-yellow-400 text-yellow-900',
-          animation: { y: [-5, 5, -5], scale: [1, 1.05, 1] }
+          animation: { y: [-5, 5, -5], scale: [1, 1.05, 1] },
+          showHand: true,
+          handIcon: '👆',
+          handAnimation: { scale: [1, 0.8, 1, 0.8, 1] },
+          handPosition: 'top-[120%] left-1/2 -translate-x-1/2',
+          clickable: false
         };
       case 'gacha_pull':
         return {
           text: t.gacha_pull,
-          position: 'bottom-32 left-4',
+          position: 'bottom-48 left-4',
           tailClass: 'bottom-[-10px] left-8 border-t-white',
           icon: '🎰',
           color: 'bg-white text-slate-800',
-          animation: { y: [-5, 5, -5] }
+          animation: { y: [-5, 5, -5] },
+          showHand: true,
+          handIcon: '👇',
+          handAnimation: { y: [0, 10, 0] },
+          handPosition: 'top-[120%] left-8',
+          clickable: false
         };
       case 'equip_item':
         return {
           text: t.equip_item,
-          position: 'bottom-32 left-1/2 -translate-x-1/2',
+          position: 'bottom-24 left-1/2 -translate-x-1/2',
           tailClass: 'bottom-[-10px] left-1/2 -translate-x-1/2 border-t-white',
           icon: '🎒',
           color: 'bg-white text-slate-800',
-          animation: { y: [-5, 5, -5] }
+          animation: { y: [-5, 5, -5] },
+          showHand: true,
+          handIcon: '👇',
+          handAnimation: { y: [0, 10, 0] },
+          handPosition: 'top-[120%] left-1/2 -translate-x-1/2',
+          clickable: false
         };
       default:
         return null;
@@ -60,7 +91,14 @@ export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang })
   const config = getBubbleConfig();
 
   return (
-    <div className="absolute inset-0 z-[9999] pointer-events-none overflow-hidden">
+    <div 
+      className={`absolute inset-0 z-[9999] ${config?.clickable ? 'pointer-events-auto' : 'pointer-events-none'} overflow-hidden`}
+      onClick={() => {
+        if (config?.clickable && step) {
+          finishTutorial(step);
+        }
+      }}
+    >
       <AnimatePresence mode="wait">
         {config && (
           <motion.div
@@ -94,11 +132,25 @@ export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang })
               <div className={`absolute w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[12px] ${config.tailClass}`} />
             </motion.div>
 
+            {/* Dynamic Hand */}
+            {config.showHand && (
+              <motion.div
+                animate={config.handAnimation}
+                transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                className={`absolute text-4xl ${config.handPosition}`}
+              >
+                {config.handIcon}
+              </motion.div>
+            )}
+
             {/* Skip Button (only for welcome/swipe) */}
             {(step === 'welcome' || step === 'swipe_guide') && (
-              <div className="mt-4 flex justify-center">
+              <div className="mt-16 flex justify-center">
                 <button
-                  onClick={() => finishTutorial(step as string)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    finishTutorial(step as string);
+                  }}
                   className="pointer-events-auto bg-black/20 hover:bg-black/30 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-colors"
                 >
                   {t.skip}

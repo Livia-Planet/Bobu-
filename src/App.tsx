@@ -619,7 +619,7 @@ export default function App() {
                   onTileClick={handleTileClick}
                   onAscend={(r, c) => {
                     ascendTile(r, c);
-                    finishTutorial('double_tap_cmt');
+                    if (tutorialStep === 'double_tap_cmt') finishTutorial('double_tap_cmt');
                   }}
                   onBoost={boostTile}
                   equipment={equipment}
@@ -797,6 +797,7 @@ export default function App() {
           onClick={() => {
             soundEngine.playClick();
             setIsGachaOpen(true);
+            if (tutorialStep === 'gacha_pull') finishTutorial('gacha_pull');
           }}
           className={`relative w-16 h-20 flex flex-col items-center justify-center shadow-[0_10px_20px_rgba(0,0,0,0.2)] rounded-full overflow-hidden border-4 border-white cursor-pointer
             ${tutorialStep === 'gacha_pull' ? 'z-[1001] relative ring-4 ring-pink-400 animate-pulse bg-white' : ''}

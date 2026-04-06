@@ -28,6 +28,7 @@ export const BottomDrawer = ({ gachaCollection, unlockedChains, unlockedPlanets,
           onClick={() => {
             soundEngine.playClick();
             setIsOpen(true);
+            if (tutorialStep === 'equip_item') finishTutorial('equip_item');
           }}
           whileHover={{ y: -5 }}
           whileTap={{ scale: 0.95 }}
