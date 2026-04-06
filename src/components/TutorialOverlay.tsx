@@ -30,50 +30,39 @@ export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang })
           handPosition: 'top-[120%] left-1/2 -translate-x-1/2',
           clickable: false
         };
-      case 'currency_intro':
+      case 'powerup_intro':
         return {
-          text: t.currency_intro,
-          position: 'top-20 right-4',
-          tailClass: 'top-[-10px] right-8 border-b-white rotate-180',
-          icon: '🪙',
+          text: t.powerup_intro,
+          position: 'top-1/2 right-20 -translate-y-1/2',
+          tailClass: 'top-1/2 right-[-10px] -translate-y-1/2 border-l-[12px] border-l-white border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent !border-r-0 !border-t-transparent !border-b-transparent',
+          icon: '✨',
           color: 'bg-white text-slate-800',
-          animation: { y: [-5, 5, -5] },
-          showHand: false,
+          animation: { x: [-5, 5, -5] },
+          showHand: true,
+          handIcon: '👉',
+          handAnimation: { x: [0, 10, 0] },
+          handPosition: 'top-1/2 right-[-40px] -translate-y-1/2',
           clickable: true
         };
-      case 'double_tap_cmt':
+      case 'token_intro':
         return {
-          text: t.double_tap_cmt,
-          position: 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
-          tailClass: 'hidden',
-          icon: '✨',
-          color: 'bg-yellow-400 text-yellow-900',
-          animation: { y: [-5, 5, -5], scale: [1, 1.05, 1] },
-          showHand: true,
-          handIcon: '👆',
-          handAnimation: { scale: [1, 0.8, 1, 0.8, 1] },
-          handPosition: 'top-[120%] left-1/2 -translate-x-1/2',
-          clickable: false
-        };
-      case 'gacha_pull':
-        return {
-          text: t.gacha_pull,
-          position: 'bottom-48 left-4',
-          tailClass: 'bottom-[-10px] left-8 border-t-white',
-          icon: '🎰',
+          text: t.token_intro,
+          position: 'bottom-32 left-24',
+          tailClass: 'top-1/2 left-[-10px] -translate-y-1/2 border-r-[12px] border-r-white border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent !border-l-0 !border-t-transparent !border-b-transparent',
+          icon: '🪙',
           color: 'bg-white text-slate-800',
-          animation: { y: [-5, 5, -5] },
+          animation: { x: [-5, 5, -5] },
           showHand: true,
-          handIcon: '👇',
-          handAnimation: { y: [0, 10, 0] },
-          handPosition: 'top-[120%] left-8',
-          clickable: false
+          handIcon: '👈',
+          handAnimation: { x: [0, -10, 0] },
+          handPosition: 'top-1/2 left-[-40px] -translate-y-1/2',
+          clickable: true
         };
-      case 'equip_item':
+      case 'equip_new_item':
         return {
-          text: t.equip_item,
+          text: t.equip_new_item,
           position: 'bottom-24 left-1/2 -translate-x-1/2',
-          tailClass: 'bottom-[-10px] left-1/2 -translate-x-1/2 border-t-white',
+          tailClass: 'bottom-[-10px] left-1/2 -translate-x-1/2 border-t-[12px] border-t-white border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent !border-b-0',
           icon: '🎒',
           color: 'bg-white text-slate-800',
           animation: { y: [-5, 5, -5] },
@@ -81,7 +70,7 @@ export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang })
           handIcon: '👇',
           handAnimation: { y: [0, 10, 0] },
           handPosition: 'top-[120%] left-1/2 -translate-x-1/2',
-          clickable: false
+          clickable: true
         };
       default:
         return null;

@@ -373,6 +373,16 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     });
   }, []);
 
+  const [hasOpenedDrawer, setHasOpenedDrawer] = useState<boolean>(() => {
+    return localStorage.getItem('bobu_hasOpenedDrawer') === 'true';
+  });
+  const [hasPulledGacha, setHasPulledGacha] = useState<boolean>(() => {
+    return localStorage.getItem('bobu_hasPulledGacha') === 'true';
+  });
+
+  useEffect(() => { localStorage.setItem('bobu_hasOpenedDrawer', hasOpenedDrawer.toString()); }, [hasOpenedDrawer]);
+  useEffect(() => { localStorage.setItem('bobu_hasPulledGacha', hasPulledGacha.toString()); }, [hasPulledGacha]);
+
   const [gameState, setGameState] = useState<GameState>('loading');
 
   useEffect(() => {
@@ -873,47 +883,30 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
   useEffect(() => {
     if (gameState !== 'playing') return;
 
-    // swipe_guide end
+    // swipe_guide end -> powerup_intro
     if ((tutorialStep === 'swipe_guide' || tutorialStep === 'welcome') && score > 0) {
-      setTutorialStep('currency_intro');
+      setTutorialStep('powerup_intro');
       markTutorialCompleted('swipe_guide');
       markTutorialCompleted('welcome');
     }
 
-    // double_tap_cmt trigger
-    if (!completedTutorials.includes('double_tap_cmt') && tutorialStep !== 'double_tap_cmt') {
-      let hasCMT = false;
-      for (let r = 0; r < GRID_SIZE; r++) {
-        for (let c = 0; c < GRID_SIZE; c++) {
-          if (grid[r][c]?.attributeType === 'CMT') {
-            hasCMT = true;
-            break;
-          }
-        }
-      }
-      if (hasCMT) {
-        setTutorialStep('double_tap_cmt');
-        markTutorialCompleted('double_tap_cmt');
+    // token_intro trigger
+    if (!completedTutorials.includes('token_intro') && tutorialStep !== 'token_intro') {
+      if (plusCoins > 0 && !hasPulledGacha) {
+        setTutorialStep('token_intro');
+        markTutorialCompleted('token_intro');
       }
     }
 
-    // gacha_pull trigger
-    if (!completedTutorials.includes('gacha_pull') && tutorialStep !== 'gacha_pull') {
-      if (plusCoins >= 5 && gachaCollection.length === 0) {
-        setTutorialStep('gacha_pull');
-        markTutorialCompleted('gacha_pull');
+    // equip_new_item trigger
+    if (!completedTutorials.includes('equip_new_item') && tutorialStep !== 'equip_new_item') {
+      if (newGachaItems.length > 0 && !hasOpenedDrawer) {
+        setTutorialStep('equip_new_item');
+        markTutorialCompleted('equip_new_item');
       }
     }
 
-    // equip_item trigger
-    if (!completedTutorials.includes('equip_item') && tutorialStep !== 'equip_item') {
-      if (newGachaItems.length > 0) {
-        setTutorialStep('equip_item');
-        markTutorialCompleted('equip_item');
-      }
-    }
-
-  }, [grid, score, plusCoins, newGachaItems, tutorialStep, completedTutorials, markTutorialCompleted, gameState]);
+  }, [grid, score, plusCoins, newGachaItems, tutorialStep, completedTutorials, markTutorialCompleted, gameState, hasPulledGacha, hasOpenedDrawer]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -954,6 +947,7 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     grid, score, gameOver, message, dataExhaust, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, instability,
     isShaking, carrots, plusCoins, setPlusCoins, activeProp, conflictingIds, activeLaws, setConflictingIds, setActiveProp, useCarrot, boostTile, ascendTile,
     slide, resetGame, unlockedChains, activeFamilies, setActiveFamilies, goldenFlash, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile,
-    tutorialStep, setTutorialStep, finishTutorial, gameState, setGameState
+    tutorialStep, setTutorialStep, finishTutorial, gameState, setGameState,
+    hasOpenedDrawer, setHasOpenedDrawer, hasPulledGacha, setHasPulledGacha
   };
 };

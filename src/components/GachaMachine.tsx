@@ -49,7 +49,7 @@ interface GachaMachineProps {
   finishTutorial?: (step: string) => void;
 }
 
-export const GachaMachine: React.FC<GachaMachineProps> = ({ plusCoins, setPlusCoins, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, isDarkMode, lang, tutorialStep, setTutorialStep, finishTutorial }) => {
+export const GachaMachine: React.FC<GachaMachineProps> = ({ plusCoins, setPlusCoins, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, isDarkMode, lang, tutorialStep, setTutorialStep, finishTutorial, setHasPulledGacha }: any) => {
   const [pullStage, setPullSequence] = useState<'idle' | 'churning' | 'flash' | 'speedlines' | 'reveal'>('idle');
   const [pulledItem, setPulledItem] = useState<GachaItem | null>(null);
   const [pullRarity, setPullRarity] = useState<'N' | 'R' | 'SR' | 'UR' | null>(null);
@@ -75,6 +75,7 @@ export const GachaMachine: React.FC<GachaMachineProps> = ({ plusCoins, setPlusCo
     setPullSequence('churning');
     setPulledItem(null);
     setPullRarity(null);
+    setHasPulledGacha(true);
     
     soundEngine.playCoinInsert();
     vibrate(50);
@@ -253,7 +254,12 @@ export const GachaMachine: React.FC<GachaMachineProps> = ({ plusCoins, setPlusCo
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[70] flex flex-col items-center justify-center bg-black/60 backdrop-blur-md"
-            onClick={() => setPullSequence('idle')}
+            onClick={() => {
+              setPullSequence('idle');
+              if (gachaCollection.length === 1) {
+                setTutorialStep('equip_new_item');
+              }
+            }}
             onMouseMove={(e) => {
               const card = document.getElementById('gacha-reveal-card');
               if (!card) return;

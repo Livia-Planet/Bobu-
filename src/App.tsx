@@ -98,7 +98,8 @@ export default function App() {
     grid, score, gameOver, message, dataExhaust, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, instability,
     isShaking, carrots, plusCoins, setPlusCoins, activeProp, conflictingIds, activeLaws, setConflictingIds, setActiveProp, useCarrot, boostTile, ascendTile,
     slide, resetGame, goldenFlash, unlockedChains, activeFamilies, setActiveFamilies, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile,
-    tutorialStep, setTutorialStep, finishTutorial, gameState, setGameState
+    tutorialStep, setTutorialStep, finishTutorial, gameState, setGameState,
+    hasOpenedDrawer, setHasOpenedDrawer, hasPulledGacha, setHasPulledGacha
   } = useGameLogic(equipment.musicTracks);
 
   const handleToggleFamily = (family: string) => {
@@ -357,9 +358,9 @@ export default function App() {
     }
   };
 
-  // Tutorial logic: close GachaMachine when moving to equip_item
+  // Tutorial logic: close GachaMachine when moving to equip_new_item
   useEffect(() => {
-    if (tutorialStep === 'equip_item') {
+    if (tutorialStep === 'equip_new_item') {
       setIsGachaOpen(false);
     }
   }, [tutorialStep]);
@@ -797,10 +798,10 @@ export default function App() {
           onClick={() => {
             soundEngine.playClick();
             setIsGachaOpen(true);
-            if (tutorialStep === 'gacha_pull') finishTutorial('gacha_pull');
+            if (tutorialStep === 'token_intro') finishTutorial('token_intro');
           }}
           className={`relative w-16 h-20 flex flex-col items-center justify-center shadow-[0_10px_20px_rgba(0,0,0,0.2)] rounded-full overflow-hidden border-4 border-white cursor-pointer
-            ${tutorialStep === 'gacha_pull' ? 'z-[1001] relative ring-4 ring-pink-400 animate-pulse bg-white' : ''}
+            ${tutorialStep === 'token_intro' ? 'z-[1001] relative ring-4 ring-pink-400 animate-pulse bg-white' : ''}
           `}
         >
           <div className="w-full h-1/2 bg-red-500 border-b-4 border-slate-800/20"></div>
@@ -819,8 +820,9 @@ export default function App() {
           onClick={() => {
             soundEngine.playClick();
             carrots > 0 && setActiveProp(activeProp === 'carrot' ? null : 'carrot');
+            if (tutorialStep === 'powerup_intro') finishTutorial('powerup_intro');
           }}
-          className={`w-16 h-16 rounded-full shadow-[0_10px_20px_rgba(0,0,0,0.1)] flex items-center justify-center text-3xl border-4 ${activeProp === 'carrot' ? 'bg-orange-100 border-orange-400 scale-110' : 'bg-white border-white'}`}
+          className={`w-16 h-16 rounded-full shadow-[0_10px_20px_rgba(0,0,0,0.1)] flex items-center justify-center text-3xl border-4 ${activeProp === 'carrot' ? 'bg-orange-100 border-orange-400 scale-110' : 'bg-white border-white'} ${tutorialStep === 'powerup_intro' ? 'z-[1001] relative ring-4 ring-orange-400 animate-pulse' : ''}`}
         >
           🥕
           <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">{carrots}</span>
@@ -832,8 +834,9 @@ export default function App() {
           onClick={() => {
             soundEngine.playClick();
             plusCoins > 0 && setActiveProp(activeProp === 'plus' ? null : 'plus');
+            if (tutorialStep === 'powerup_intro') finishTutorial('powerup_intro');
           }}
-          className={`w-16 h-16 rounded-full shadow-[0_10px_20px_rgba(0,0,0,0.1)] flex items-center justify-center text-3xl border-4 ${activeProp === 'plus' ? 'bg-yellow-100 border-yellow-400 scale-110' : 'bg-white border-white'}`}
+          className={`w-16 h-16 rounded-full shadow-[0_10px_20px_rgba(0,0,0,0.1)] flex items-center justify-center text-3xl border-4 ${activeProp === 'plus' ? 'bg-yellow-100 border-yellow-400 scale-110' : 'bg-white border-white'} ${tutorialStep === 'powerup_intro' ? 'z-[1001] relative ring-4 ring-yellow-400 animate-pulse' : ''}`}
         >
           🪙
           <span className="absolute -top-2 -right-2 bg-yellow-500 text-white text-xs font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">{plusCoins}</span>
@@ -901,6 +904,7 @@ export default function App() {
         tutorialStep={tutorialStep}
         setTutorialStep={setTutorialStep}
         finishTutorial={finishTutorial}
+        setHasOpenedDrawer={setHasOpenedDrawer}
       />
 
       {/* Gacha Machine Overlay */}
@@ -934,6 +938,7 @@ export default function App() {
               tutorialStep={tutorialStep}
               setTutorialStep={setTutorialStep}
               finishTutorial={finishTutorial}
+              setHasPulledGacha={setHasPulledGacha}
             />
           </motion.div>
         )}
