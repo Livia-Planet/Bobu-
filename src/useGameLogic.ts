@@ -374,6 +374,18 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     return localStorage.getItem('bobu_hasPulledGacha') === 'true';
   });
 
+  const [hasSeenLawTutorial, setHasSeenLawTutorial] = useState<boolean>(() => {
+    return localStorage.getItem('bobu_has_seen_law_tutorial') === 'true';
+  });
+
+  const triggerLawTutorial = useCallback(() => {
+    if (!hasSeenLawTutorial) {
+      setHasSeenLawTutorial(true);
+      localStorage.setItem('bobu_has_seen_law_tutorial', 'true');
+      setTutorialStep('law_intro');
+    }
+  }, [hasSeenLawTutorial]);
+
   useEffect(() => { localStorage.setItem('bobu_hasOpenedDrawer', hasOpenedDrawer.toString()); }, [hasOpenedDrawer]);
   useEffect(() => { localStorage.setItem('bobu_hasPulledGacha', hasPulledGacha.toString()); }, [hasPulledGacha]);
 
@@ -910,7 +922,7 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     grid, score, gameOver, message, dataExhaust, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, instability,
     isShaking, carrots, plusCoins, setPlusCoins, activeProp, conflictingIds, activeLaws, setConflictingIds, setActiveProp, useCarrot, boostTile, ascendTile,
     slide, resetGame, unlockedChains, activeFamilies, setActiveFamilies, goldenFlash, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile,
-    tutorialStep, setTutorialStep, advanceTutorial, gameState, setGameState,
+    tutorialStep, setTutorialStep, advanceTutorial, triggerLawTutorial, gameState, setGameState,
     hasOpenedDrawer, setHasOpenedDrawer, hasPulledGacha, setHasPulledGacha
   };
 };

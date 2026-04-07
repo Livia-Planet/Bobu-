@@ -19,31 +19,21 @@ export const TutorialOverlay: React.FC<Props> = ({ step, advanceTutorial, lang }
       case 'swipe_guide':
         return {
           text: step === 'welcome' ? t.welcome : t.swipe_guide,
-          position: 'top-32 left-1/2 -translate-x-1/2',
-          tailClass: 'bottom-[-10px] left-1/2 -translate-x-1/2 border-t-white',
+          position: 'top-1/4 left-1/2 -translate-x-1/2',
+          tailClass: 'bottom-[-10px] left-1/2 -translate-x-1/2 border-t-indigo-500',
           icon: '📱',
-          color: 'bg-white text-slate-800',
+          color: 'bg-indigo-500 text-white',
           animation: { y: [-5, 5, -5] },
-          showHand: true,
-          handIcon: '👆',
-          handAnimation: { x: [-30, 30, -30] },
-          handPosition: 'top-[120%] left-1/2 -translate-x-1/2',
-          clickable: false,
           showNext: false
         };
       case 'powerup_intro':
         return {
           text: t.powerup_intro,
-          position: 'top-1/2 right-20 -translate-y-1/2',
-          tailClass: 'top-1/2 right-[-10px] -translate-y-1/2 border-l-[12px] border-l-white border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent !border-r-0 !border-t-transparent !border-b-transparent',
+          position: 'top-1/3 right-16',
+          tailClass: 'right-[-10px] top-1/2 -translate-y-1/2 border-l-[12px] border-l-orange-400 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent !border-r-0',
           icon: '✨',
-          color: 'bg-white text-slate-800',
+          color: 'bg-orange-400 text-white',
           animation: { x: [-5, 5, -5] },
-          showHand: true,
-          handIcon: '👉',
-          handAnimation: { x: [0, 10, 0] },
-          handPosition: 'top-1/2 right-[-40px] -translate-y-1/2',
-          clickable: false,
           showNext: true,
           nextStep: 'gacha_guide'
         };
@@ -51,31 +41,45 @@ export const TutorialOverlay: React.FC<Props> = ({ step, advanceTutorial, lang }
         return {
           text: t.gacha_guide,
           position: 'bottom-48 left-6',
-          tailClass: 'bottom-[-10px] left-8 border-t-[12px] border-t-white border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent !border-b-0',
+          tailClass: 'bottom-[-10px] left-8 border-t-[12px] border-t-pink-400 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent !border-b-0',
           icon: '🪙',
-          color: 'bg-white text-slate-800',
+          color: 'bg-pink-400 text-white',
           animation: { y: [-5, 5, -5] },
-          showHand: true,
-          handIcon: '👇',
-          handAnimation: { y: [0, 10, 0] },
-          handPosition: 'top-[120%] left-8',
-          clickable: false,
           showNext: false
         };
       case 'equip_guide':
         return {
           text: t.equip_guide,
-          position: 'bottom-24 left-1/2 -translate-x-1/2',
-          tailClass: 'bottom-[-10px] left-1/2 -translate-x-1/2 border-t-[12px] border-t-white border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent !border-b-0',
+          position: 'bottom-36 left-1/2 -translate-x-1/2',
+          tailClass: 'bottom-[-10px] left-1/2 -translate-x-1/2 border-t-[12px] border-t-cyan-400 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent !border-b-0',
           icon: '🎒',
-          color: 'bg-white text-slate-800',
+          color: 'bg-cyan-400 text-white',
           animation: { y: [-5, 5, -5] },
-          showHand: true,
-          handIcon: '👇',
-          handAnimation: { y: [0, 10, 0] },
-          handPosition: 'top-[120%] left-1/2 -translate-x-1/2',
-          clickable: false,
           showNext: false
+        };
+      case 'celebration':
+        return {
+          text: (t as any).celebration,
+          position: 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
+          tailClass: 'hidden',
+          icon: '🎉',
+          color: 'bg-yellow-500 text-white',
+          animation: { scale: [1, 1.05, 1] },
+          showNext: false,
+          customButton: lang === 'zh' ? '开始游戏' : "Let's Go!",
+          customAction: 'finished'
+        };
+      case 'law_intro':
+        return {
+          text: (t as any).law_intro,
+          position: 'top-24 left-1/2 -translate-x-1/2',
+          tailClass: 'hidden',
+          icon: '🌌',
+          color: 'bg-purple-500 text-white',
+          animation: { y: [-5, 5, -5] },
+          showNext: false,
+          customButton: lang === 'zh' ? '我知道了' : 'Got it',
+          customAction: 'finished'
         };
       default:
         return null;
@@ -85,16 +89,7 @@ export const TutorialOverlay: React.FC<Props> = ({ step, advanceTutorial, lang }
   const config = getBubbleConfig();
 
   return (
-    <div 
-      className={`absolute inset-0 z-[9999] ${config?.clickable || config?.showNext || step === 'welcome' || step === 'swipe_guide' || step === 'gacha_guide' || step === 'equip_guide' ? 'pointer-events-auto' : 'pointer-events-none'} overflow-hidden`}
-      onClick={(e) => {
-        // Block all clicks during strict tutorial steps unless it's a specific button
-        if (step === 'powerup_intro' || step === 'gacha_guide' || step === 'equip_guide') {
-          e.stopPropagation();
-          e.preventDefault();
-        }
-      }}
-    >
+    <div className={`absolute inset-0 z-[9999] ${step === 'celebration' ? 'pointer-events-auto bg-black/40 backdrop-blur-sm' : 'pointer-events-none'} overflow-hidden`}>
       <AnimatePresence mode="wait">
         {config && (
           <motion.div
@@ -103,7 +98,7 @@ export const TutorialOverlay: React.FC<Props> = ({ step, advanceTutorial, lang }
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0, opacity: 0, y: -20 }}
             transition={{ type: "spring", bounce: 0.5 }}
-            className={`absolute ${config.position} max-w-[280px] w-max`}
+            className={`absolute ${config.position} max-w-[280px] w-max pointer-events-none`}
           >
             <motion.div
               animate={config.animation}
@@ -128,28 +123,30 @@ export const TutorialOverlay: React.FC<Props> = ({ step, advanceTutorial, lang }
               <div className={`absolute w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[12px] ${config.tailClass}`} />
             </motion.div>
 
-            {/* Dynamic Hand */}
-            {config.showHand && (
-              <motion.div
-                animate={config.handAnimation}
-                transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                className={`absolute text-4xl ${config.handPosition} pointer-events-none`}
-              >
-                {config.handIcon}
-              </motion.div>
-            )}
-
             {/* Next Button */}
             {config.showNext && (
               <div className="mt-4 flex justify-center">
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={() => {
                     if (config.nextStep) advanceTutorial(config.nextStep as TutorialStep);
                   }}
-                  className="pointer-events-auto bg-blue-500 hover:bg-blue-600 text-white font-bold text-sm px-6 py-2 rounded-full shadow-lg transition-transform active:scale-95"
+                  className="pointer-events-auto bg-white/20 hover:bg-white/30 text-white font-bold text-sm px-6 py-2 rounded-full shadow-lg transition-transform active:scale-95 backdrop-blur-sm"
                 >
                   Next
+                </button>
+              </div>
+            )}
+
+            {/* Custom Button */}
+            {config.customButton && (
+              <div className="mt-4 flex justify-center">
+                <button
+                  onClick={() => {
+                    if (config.customAction) advanceTutorial(config.customAction as TutorialStep);
+                  }}
+                  className="pointer-events-auto bg-white text-slate-800 font-black text-sm px-8 py-3 rounded-full shadow-xl transition-transform active:scale-95"
+                >
+                  {config.customButton}
                 </button>
               </div>
             )}
@@ -158,8 +155,7 @@ export const TutorialOverlay: React.FC<Props> = ({ step, advanceTutorial, lang }
             {(step === 'welcome' || step === 'swipe_guide') && (
               <div className="mt-16 flex justify-center">
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={() => {
                     advanceTutorial('finished');
                   }}
                   className="pointer-events-auto bg-black/20 hover:bg-black/30 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-colors"

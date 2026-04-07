@@ -59,7 +59,7 @@ export interface EquipmentState {
   boardTheme: string;
 }
 
-export type TutorialStep = 'welcome' | 'swipe_guide' | 'powerup_intro' | 'gacha_guide' | 'gacha_pulling' | 'equip_guide' | 'finished';
+export type TutorialStep = 'welcome' | 'swipe_guide' | 'powerup_intro' | 'gacha_guide' | 'gacha_pulling' | 'equip_guide' | 'celebration' | 'law_intro' | 'finished';
 
 export type GameState = 'loading' | 'start_menu' | 'playing';
 

@@ -77,7 +77,7 @@ export const translations = {
       medalOfPride: "Bobu 的骄傲勋章",
       pioneerCert: "宇宙开拓者证明"
     },
-    tutorial: { skip: "跳过引导", welcome: "欢迎来到星体盒！滑动屏幕，让同样的星体相撞吧！", swipe_guide: "欢迎来到星体盒！滑动屏幕，让同样的星体相撞吧！", powerup_intro: "太棒了！右侧是你的生存工具：🥕炸毁方块，🪙升级方块！(点击继续)", gacha_guide: "送你 5 个代币！快点击左侧的扭蛋机，召唤神秘潮玩吧！", equip_guide: "新战利品入库！打开底部的档案室，立刻装备它！" },
+    tutorial: { skip: "跳过引导", welcome: "欢迎来到星体盒！滑动屏幕，让同样的星体相撞吧！", swipe_guide: "欢迎来到星体盒！滑动屏幕，让同样的星体相撞吧！", powerup_intro: "太棒了！右侧是你的生存工具：🥕炸毁方块，🪙升级方块！(点击继续)", gacha_guide: "送你 5 个代币！快点击左侧的扭蛋机，召唤神秘潮玩吧！", equip_guide: "新战利品入库！打开底部的档案室，立刻装备它！", celebration: "🎉 恭喜完成基础训练！现在，尽情合并星球，探索实验室的无限可能吧！", law_intro: "🌌 进阶发现：你装备了【法则】！带有相同法则的星球合并时，会产生强大的共鸣效果，快去棋盘上试试吧！" },
     labLog: {
       planets: {
         '2': { name: "星尘微粒", desc: "Bobu打喷嚏崩出来的发光小渣渣，虽然小，但它是整个宇宙的起点哦！" },
@@ -232,7 +232,7 @@ export const translations = {
       medalOfPride: "Bobu's Medal of Pride",
       pioneerCert: "Cosmic Pioneer Certificate"
     },
-    tutorial: { skip: "Skip Tutorial", welcome: "Welcome! Swipe to merge identical stars!", swipe_guide: "Welcome! Swipe to merge identical stars!", powerup_intro: "Great! Right toolbar is your survival kit: 🥕 bombs, 🪙 upgrades! (Tap to continue)", gacha_guide: "Here's 5 tokens! Tap the left Gacha machine to summon mystery toys!", equip_guide: "New loot! Open the Lab Log below to equip it now!" },
+    tutorial: { skip: "Skip Tutorial", welcome: "Welcome! Swipe to merge identical stars!", swipe_guide: "Welcome! Swipe to merge identical stars!", powerup_intro: "Great! Right toolbar is your survival kit: 🥕 bombs, 🪙 upgrades! (Tap to continue)", gacha_guide: "Here's 5 tokens! Tap the left Gacha machine to summon mystery toys!", equip_guide: "New loot! Open the Lab Log below to equip it now!", celebration: "🎉 Training complete! Now go explore the universe and break records!", law_intro: "🌌 Advanced: You equipped a Law! Merging planets with the same Law triggers powerful resonance effects!" },
     labLog: {
       planets: {
         '2': { name: "Stardust", desc: "A glowing speck from Bobu's sneeze. Small, but it's the start of the universe!" },

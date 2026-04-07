@@ -19,6 +19,7 @@ interface LabLogProps {
   setNewGachaItems: React.Dispatch<React.SetStateAction<string[]>>;
   tutorialStep?: string | null;
   setTutorialStep?: (step: any) => void;
+  triggerLawTutorial?: () => void;
 }
 
 export const PlanetVisual = ({ value, form, rarity, color }: { value: string | number, form: number, rarity: string, color: string }) => {
@@ -114,7 +115,7 @@ const FlipCard: React.FC<{ item: GachaItem, isUnlocked: boolean, isEquipped: boo
   );
 };
 
-export const LabLog: React.FC<LabLogProps> = ({ gachaCollection, unlockedChains, unlockedPlanets, lang, isDarkMode, equipment, setEquipment, newGachaItems, setNewGachaItems, tutorialStep, setTutorialStep }) => {
+export const LabLog: React.FC<LabLogProps> = ({ gachaCollection, unlockedChains, unlockedPlanets, lang, isDarkMode, equipment, setEquipment, newGachaItems, setNewGachaItems, tutorialStep, setTutorialStep, triggerLawTutorial }) => {
   const [toast, setToast] = useState<string | null>(null);
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'planets' | 'audio' | 'themes' | 'laws'>('planets');
@@ -199,7 +200,10 @@ export const LabLog: React.FC<LabLogProps> = ({ gachaCollection, unlockedChains,
                       if (item.type === 'TileSkin') {
                         const val = (item as TileSkin).value as string;
                         if (isEquipped) next.activeLaws = next.activeLaws.filter(id => id !== val);
-                        else next.activeLaws = [...next.activeLaws, val];
+                        else {
+                          next.activeLaws = [...next.activeLaws, val];
+                          if (triggerLawTutorial) triggerLawTutorial();
+                        }
                       }
                       return next;
                     });

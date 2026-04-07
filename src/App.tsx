@@ -98,7 +98,7 @@ export default function App() {
     grid, score, gameOver, message, dataExhaust, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, instability,
     isShaking, carrots, plusCoins, setPlusCoins, activeProp, conflictingIds, activeLaws, setConflictingIds, setActiveProp, useCarrot, boostTile, ascendTile,
     slide, resetGame, goldenFlash, unlockedChains, activeFamilies, setActiveFamilies, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile,
-    tutorialStep, setTutorialStep, advanceTutorial, gameState, setGameState,
+    tutorialStep, setTutorialStep, advanceTutorial, triggerLawTutorial, gameState, setGameState,
     hasOpenedDrawer, setHasOpenedDrawer, hasPulledGacha, setHasPulledGacha
   } = useGameLogic(equipment.musicTracks);
 
@@ -901,6 +901,7 @@ export default function App() {
         tutorialStep={tutorialStep}
         setTutorialStep={setTutorialStep}
         advanceTutorial={advanceTutorial}
+        triggerLawTutorial={triggerLawTutorial}
         setHasOpenedDrawer={setHasOpenedDrawer}
       />
 
