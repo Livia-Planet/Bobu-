@@ -77,7 +77,7 @@ export const translations = {
       medalOfPride: "Bobu 的骄傲勋章",
       pioneerCert: "宇宙开拓者证明"
     },
-    tutorial: { skip: "跳过引导", welcome: "欢迎来到星体盒！滑动屏幕，让同样的星体相撞吧！", swipe_guide: "欢迎来到星体盒！滑动屏幕，让同样的星体相撞吧！", powerup_intro: "右侧工具栏：🥕可炸掉方块，🪙可将方块等级翻倍！", token_intro: "获得代币！点击左侧扭蛋机，抽取限定皮肤和音乐！", double_tap_cmt: "哇！是高维奇迹星！双击它，榨取它的金币！", gacha_pull: "金币够了！快点击左下角的扭蛋机，召唤实体潮玩！", equip_new_item: "获得新收藏！点击下方档案室，立刻装备你的新皮肤/音乐！" },
+    tutorial: { skip: "跳过引导", welcome: "欢迎来到星体盒！滑动屏幕，让同样的星体相撞吧！", swipe_guide: "欢迎来到星体盒！滑动屏幕，让同样的星体相撞吧！", powerup_intro: "太棒了！右侧是你的生存工具：🥕炸毁方块，🪙升级方块！(点击继续)", gacha_guide: "送你 5 个代币！快点击左侧的扭蛋机，召唤神秘潮玩吧！", equip_guide: "新战利品入库！打开底部的档案室，立刻装备它！" },
     labLog: {
       planets: {
         '2': { name: "星尘微粒", desc: "Bobu打喷嚏崩出来的发光小渣渣，虽然小，但它是整个宇宙的起点哦！" },
@@ -232,7 +232,7 @@ export const translations = {
       medalOfPride: "Bobu's Medal of Pride",
       pioneerCert: "Cosmic Pioneer Certificate"
     },
-    tutorial: { skip: "Skip Tutorial", welcome: "Welcome! Swipe to merge identical stars!", swipe_guide: "Welcome! Swipe to merge identical stars!", powerup_intro: "Right Toolbar: 🥕 bombs blocks, 🪙 doubles block level!", token_intro: "Got tokens! Tap the left Gacha machine to pull limited skins and music!", double_tap_cmt: "A Miracle Star! Double tap it to extract coins!", gacha_pull: "Enough coins! Tap the Gacha machine to pull a toy!", equip_new_item: "New collection! Tap the Lab Log below to equip your new skin/music!" },
+    tutorial: { skip: "Skip Tutorial", welcome: "Welcome! Swipe to merge identical stars!", swipe_guide: "Welcome! Swipe to merge identical stars!", powerup_intro: "Great! Right toolbar is your survival kit: 🥕 bombs, 🪙 upgrades! (Tap to continue)", gacha_guide: "Here's 5 tokens! Tap the left Gacha machine to summon mystery toys!", equip_guide: "New loot! Open the Lab Log below to equip it now!" },
     labLog: {
       planets: {
         '2': { name: "Stardust", desc: "A glowing speck from Bobu's sneeze. Small, but it's the start of the universe!" },

@@ -5,7 +5,7 @@ import { LabLog } from './LabLog';
 import { translations, Language } from '../translations';
 import { soundEngine } from '../SoundEngine';
 
-export const BottomDrawer = ({ gachaCollection, unlockedChains, unlockedPlanets, bestScore, lifetimeScore, lang, isDarkMode, equipment, setEquipment, newGachaItems, setNewGachaItems, tutorialStep, setTutorialStep, finishTutorial, setHasOpenedDrawer }: any) => {
+export const BottomDrawer = ({ gachaCollection, unlockedChains, unlockedPlanets, bestScore, lifetimeScore, lang, isDarkMode, equipment, setEquipment, newGachaItems, setNewGachaItems, tutorialStep, setTutorialStep, advanceTutorial, setHasOpenedDrawer }: any) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'log' | 'leaderboard'>('log');
   const t = translations[lang as Language];
@@ -23,13 +23,13 @@ export const BottomDrawer = ({ gachaCollection, unlockedChains, unlockedPlanets,
         <motion.button
           className={`pointer-events-auto px-6 py-3 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.05)] border font-bold flex items-center gap-2 backdrop-blur-md
             ${isDarkMode ? 'bg-indigo-900/80 border-indigo-500/30 text-indigo-200' : 'bg-white/80 border-white/50 text-slate-600'}
-            ${tutorialStep === 'equip_new_item' ? 'z-[1001] relative ring-4 ring-cyan-400 animate-pulse' : ''}
+            ${tutorialStep === 'equip_guide' ? 'z-[1001] relative ring-4 ring-cyan-400 animate-pulse' : ''}
           `}
           onClick={() => {
             soundEngine.playClick();
             setIsOpen(true);
             setHasOpenedDrawer(true);
-            if (tutorialStep === 'equip_new_item') finishTutorial('equip_new_item');
+            if (tutorialStep === 'equip_guide') advanceTutorial('finished');
           }}
           whileHover={{ y: -5 }}
           whileTap={{ scale: 0.95 }}
@@ -86,7 +86,7 @@ export const BottomDrawer = ({ gachaCollection, unlockedChains, unlockedPlanets,
 
               <div className="flex-1 overflow-y-auto p-6 pb-24">
                 {activeTab === 'log' ? (
-                  <LabLog gachaCollection={gachaCollection} unlockedChains={unlockedChains} unlockedPlanets={unlockedPlanets} lang={lang} isDarkMode={isDarkMode} equipment={equipment} setEquipment={setEquipment} newGachaItems={newGachaItems} setNewGachaItems={setNewGachaItems} tutorialStep={tutorialStep} setTutorialStep={setTutorialStep} finishTutorial={finishTutorial} />
+                  <LabLog gachaCollection={gachaCollection} unlockedChains={unlockedChains} unlockedPlanets={unlockedPlanets} lang={lang} isDarkMode={isDarkMode} equipment={equipment} setEquipment={setEquipment} newGachaItems={newGachaItems} setNewGachaItems={setNewGachaItems} tutorialStep={tutorialStep} setTutorialStep={setTutorialStep} />
                 ) : (
                   <Leaderboard bestScore={bestScore} lifetimeScore={lifetimeScore} lang={lang} isDarkMode={isDarkMode} />
                 )}

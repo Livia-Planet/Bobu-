@@ -358,19 +358,13 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     return (saved as TutorialStep) || 'welcome';
   });
   
-  const [completedTutorials, setCompletedTutorials] = useState<string[]>(() => {
-    const saved = localStorage.getItem('bobu_completed_tutorials');
-    return saved ? JSON.parse(saved) : [];
-  });
-
   useEffect(() => { localStorage.setItem('bobu_tutorial', tutorialStep || ''); }, [tutorialStep]);
-  useEffect(() => { localStorage.setItem('bobu_completed_tutorials', JSON.stringify(completedTutorials)); }, [completedTutorials]);
 
-  const markTutorialCompleted = useCallback((step: string) => {
-    setCompletedTutorials(prev => {
-      if (!prev.includes(step)) return [...prev, step];
-      return prev;
-    });
+  const advanceTutorial = useCallback((targetStep: TutorialStep) => {
+    setTutorialStep(targetStep);
+    if (targetStep === 'gacha_guide') {
+      setPlusCoins(prev => prev + 5);
+    }
   }, []);
 
   const [hasOpenedDrawer, setHasOpenedDrawer] = useState<boolean>(() => {
@@ -873,40 +867,16 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
       }
 
       setGrid(nextGrid);
+
+      // Linear Onboarding: Swipe Guide -> Powerup Intro
+      if ((tutorialStep === 'swipe_guide' || tutorialStep === 'welcome') && result.score > 0) {
+        advanceTutorial('powerup_intro');
+      }
     } else {
       soundEngine.playError();
       setInstability(prev => Math.min(100, prev + 2));
     }
-  }, [grid, activeLaws, checkCornerBonus, instability, unlockedChains, activeFamilies, unlockedPlanets, tutorialStep]);
-
-  // JIT Tutorial Triggers
-  useEffect(() => {
-    if (gameState !== 'playing') return;
-
-    // swipe_guide end -> powerup_intro
-    if ((tutorialStep === 'swipe_guide' || tutorialStep === 'welcome') && score > 0) {
-      setTutorialStep('powerup_intro');
-      markTutorialCompleted('swipe_guide');
-      markTutorialCompleted('welcome');
-    }
-
-    // token_intro trigger
-    if (!completedTutorials.includes('token_intro') && tutorialStep !== 'token_intro') {
-      if (plusCoins > 0 && !hasPulledGacha) {
-        setTutorialStep('token_intro');
-        markTutorialCompleted('token_intro');
-      }
-    }
-
-    // equip_new_item trigger
-    if (!completedTutorials.includes('equip_new_item') && tutorialStep !== 'equip_new_item') {
-      if (newGachaItems.length > 0 && !hasOpenedDrawer) {
-        setTutorialStep('equip_new_item');
-        markTutorialCompleted('equip_new_item');
-      }
-    }
-
-  }, [grid, score, plusCoins, newGachaItems, tutorialStep, completedTutorials, markTutorialCompleted, gameState, hasPulledGacha, hasOpenedDrawer]);
+  }, [grid, activeLaws, checkCornerBonus, instability, unlockedChains, activeFamilies, unlockedPlanets, tutorialStep, advanceTutorial]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -936,18 +906,11 @@ export const useGameLogic = (musicTracks: string[] = ['music-twinkle']) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [slide, gameOver, instability]);
 
-  const finishTutorial = useCallback((step: string) => {
-    if (tutorialStep === step) {
-      setTutorialStep(null);
-    }
-    markTutorialCompleted(step);
-  }, [tutorialStep, markTutorialCompleted]);
-
   return { 
     grid, score, gameOver, message, dataExhaust, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, instability,
     isShaking, carrots, plusCoins, setPlusCoins, activeProp, conflictingIds, activeLaws, setConflictingIds, setActiveProp, useCarrot, boostTile, ascendTile,
     slide, resetGame, unlockedChains, activeFamilies, setActiveFamilies, goldenFlash, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile,
-    tutorialStep, setTutorialStep, finishTutorial, gameState, setGameState,
+    tutorialStep, setTutorialStep, advanceTutorial, gameState, setGameState,
     hasOpenedDrawer, setHasOpenedDrawer, hasPulledGacha, setHasPulledGacha
   };
 };

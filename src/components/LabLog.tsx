@@ -19,7 +19,6 @@ interface LabLogProps {
   setNewGachaItems: React.Dispatch<React.SetStateAction<string[]>>;
   tutorialStep?: string | null;
   setTutorialStep?: (step: any) => void;
-  finishTutorial?: (step: string) => void;
 }
 
 export const PlanetVisual = ({ value, form, rarity, color }: { value: string | number, form: number, rarity: string, color: string }) => {
@@ -36,7 +35,7 @@ export const PlanetVisual = ({ value, form, rarity, color }: { value: string | n
   );
 };
 
-const FlipCard: React.FC<{ item: GachaItem, isUnlocked: boolean, isEquipped: boolean, onEquip: () => void, color: string, isNew: boolean, onRemoveNew: () => void, lang: Language, t: typeof translations['en'], tutorialStep?: string | null, finishTutorial?: (step: string) => void }> = ({ item, isUnlocked, isEquipped, onEquip, color, isNew, onRemoveNew, lang, t, tutorialStep, finishTutorial }) => {
+const FlipCard: React.FC<{ item: GachaItem, isUnlocked: boolean, isEquipped: boolean, onEquip: () => void, color: string, isNew: boolean, onRemoveNew: () => void, lang: Language, t: typeof translations['en'], tutorialStep?: string | null }> = ({ item, isUnlocked, isEquipped, onEquip, color, isNew, onRemoveNew, lang, t, tutorialStep }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const isTutorialTarget = tutorialStep === 'equip_item' && (item.rarity === 'UR' || item.rarity === 'SR');
 
@@ -115,7 +114,7 @@ const FlipCard: React.FC<{ item: GachaItem, isUnlocked: boolean, isEquipped: boo
   );
 };
 
-export const LabLog: React.FC<LabLogProps> = ({ gachaCollection, unlockedChains, unlockedPlanets, lang, isDarkMode, equipment, setEquipment, newGachaItems, setNewGachaItems, tutorialStep, setTutorialStep, finishTutorial }) => {
+export const LabLog: React.FC<LabLogProps> = ({ gachaCollection, unlockedChains, unlockedPlanets, lang, isDarkMode, equipment, setEquipment, newGachaItems, setNewGachaItems, tutorialStep, setTutorialStep }) => {
   const [toast, setToast] = useState<string | null>(null);
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'planets' | 'audio' | 'themes' | 'laws'>('planets');

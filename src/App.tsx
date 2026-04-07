@@ -98,7 +98,7 @@ export default function App() {
     grid, score, gameOver, message, dataExhaust, gachaCollection, setGachaCollection, newGachaItems, setNewGachaItems, instability,
     isShaking, carrots, plusCoins, setPlusCoins, activeProp, conflictingIds, activeLaws, setConflictingIds, setActiveProp, useCarrot, boostTile, ascendTile,
     slide, resetGame, goldenFlash, unlockedChains, activeFamilies, setActiveFamilies, healFlash, bestScore, lifetimeScore, toasts, lastMoveDir, maxMergedValue, lastComboCount, unlockedPlanets, currentRunMaxTile,
-    tutorialStep, setTutorialStep, finishTutorial, gameState, setGameState,
+    tutorialStep, setTutorialStep, advanceTutorial, gameState, setGameState,
     hasOpenedDrawer, setHasOpenedDrawer, hasPulledGacha, setHasPulledGacha
   } = useGameLogic(equipment.musicTracks);
 
@@ -358,9 +358,9 @@ export default function App() {
     }
   };
 
-  // Tutorial logic: close GachaMachine when moving to equip_new_item
+  // Tutorial logic: close GachaMachine when moving to equip_guide
   useEffect(() => {
-    if (tutorialStep === 'equip_new_item') {
+    if (tutorialStep === 'equip_guide') {
       setIsGachaOpen(false);
     }
   }, [tutorialStep]);
@@ -389,7 +389,7 @@ export default function App() {
             ${getThemeClasses(equipment.boardTheme, isDarkMode)}
           `}
         >
-          <TutorialOverlay step={tutorialStep} finishTutorial={finishTutorial} lang={lang} />
+          <TutorialOverlay step={tutorialStep} advanceTutorial={advanceTutorial} lang={lang} />
           
           {isHitlag && <div className="fixed inset-0 z-40 bg-black/60 transition-opacity duration-75" />}
           
@@ -620,7 +620,6 @@ export default function App() {
                   onTileClick={handleTileClick}
                   onAscend={(r, c) => {
                     ascendTile(r, c);
-                    if (tutorialStep === 'double_tap_cmt') finishTutorial('double_tap_cmt');
                   }}
                   onBoost={boostTile}
                   equipment={equipment}
@@ -798,10 +797,10 @@ export default function App() {
           onClick={() => {
             soundEngine.playClick();
             setIsGachaOpen(true);
-            if (tutorialStep === 'token_intro') finishTutorial('token_intro');
+            if (tutorialStep === 'gacha_guide') advanceTutorial('gacha_pulling');
           }}
           className={`relative w-16 h-20 flex flex-col items-center justify-center shadow-[0_10px_20px_rgba(0,0,0,0.2)] rounded-full overflow-hidden border-4 border-white cursor-pointer
-            ${tutorialStep === 'token_intro' ? 'z-[1001] relative ring-4 ring-pink-400 animate-pulse bg-white' : ''}
+            ${tutorialStep === 'gacha_guide' ? 'z-[1001] relative ring-4 ring-pink-400 animate-pulse bg-white' : ''}
           `}
         >
           <div className="w-full h-1/2 bg-red-500 border-b-4 border-slate-800/20"></div>
@@ -820,7 +819,6 @@ export default function App() {
           onClick={() => {
             soundEngine.playClick();
             carrots > 0 && setActiveProp(activeProp === 'carrot' ? null : 'carrot');
-            if (tutorialStep === 'powerup_intro') finishTutorial('powerup_intro');
           }}
           className={`w-16 h-16 rounded-full shadow-[0_10px_20px_rgba(0,0,0,0.1)] flex items-center justify-center text-3xl border-4 ${activeProp === 'carrot' ? 'bg-orange-100 border-orange-400 scale-110' : 'bg-white border-white'} ${tutorialStep === 'powerup_intro' ? 'z-[1001] relative ring-4 ring-orange-400 animate-pulse' : ''}`}
         >
@@ -834,7 +832,6 @@ export default function App() {
           onClick={() => {
             soundEngine.playClick();
             plusCoins > 0 && setActiveProp(activeProp === 'plus' ? null : 'plus');
-            if (tutorialStep === 'powerup_intro') finishTutorial('powerup_intro');
           }}
           className={`w-16 h-16 rounded-full shadow-[0_10px_20px_rgba(0,0,0,0.1)] flex items-center justify-center text-3xl border-4 ${activeProp === 'plus' ? 'bg-yellow-100 border-yellow-400 scale-110' : 'bg-white border-white'} ${tutorialStep === 'powerup_intro' ? 'z-[1001] relative ring-4 ring-yellow-400 animate-pulse' : ''}`}
         >
@@ -903,7 +900,7 @@ export default function App() {
         setNewGachaItems={setNewGachaItems}
         tutorialStep={tutorialStep}
         setTutorialStep={setTutorialStep}
-        finishTutorial={finishTutorial}
+        advanceTutorial={advanceTutorial}
         setHasOpenedDrawer={setHasOpenedDrawer}
       />
 
@@ -917,7 +914,7 @@ export default function App() {
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             className={`fixed inset-0 flex flex-col items-center justify-center overflow-hidden
               ${isDarkMode ? 'bg-indigo-950 text-white' : 'bg-[#F0F4FF] text-slate-800'}
-              ${tutorialStep === 'gacha_pull' ? 'z-[1001]' : 'z-[200]'}
+              ${tutorialStep === 'gacha_pulling' ? 'z-[1001]' : 'z-[200]'}
             `}
           >
             <button 
@@ -937,7 +934,7 @@ export default function App() {
               lang={lang}
               tutorialStep={tutorialStep}
               setTutorialStep={setTutorialStep}
-              finishTutorial={finishTutorial}
+              advanceTutorial={advanceTutorial}
               setHasPulledGacha={setHasPulledGacha}
             />
           </motion.div>

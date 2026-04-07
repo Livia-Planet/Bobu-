@@ -5,11 +5,11 @@ import { translations, Language } from '../translations';
 
 interface Props { 
   step: TutorialStep; 
-  finishTutorial: (step: string) => void; 
+  advanceTutorial: (step: TutorialStep) => void; 
   lang: Language; 
 }
 
-export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang }) => {
+export const TutorialOverlay: React.FC<Props> = ({ step, advanceTutorial, lang }) => {
   const t = translations[lang].tutorial;
 
   const getBubbleConfig = () => {
@@ -28,7 +28,8 @@ export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang })
           handIcon: '👆',
           handAnimation: { x: [-30, 30, -30] },
           handPosition: 'top-[120%] left-1/2 -translate-x-1/2',
-          clickable: false
+          clickable: false,
+          showNext: false
         };
       case 'powerup_intro':
         return {
@@ -42,25 +43,28 @@ export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang })
           handIcon: '👉',
           handAnimation: { x: [0, 10, 0] },
           handPosition: 'top-1/2 right-[-40px] -translate-y-1/2',
-          clickable: true
+          clickable: false,
+          showNext: true,
+          nextStep: 'gacha_guide'
         };
-      case 'token_intro':
+      case 'gacha_guide':
         return {
-          text: t.token_intro,
-          position: 'bottom-32 left-24',
-          tailClass: 'top-1/2 left-[-10px] -translate-y-1/2 border-r-[12px] border-r-white border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent !border-l-0 !border-t-transparent !border-b-transparent',
+          text: t.gacha_guide,
+          position: 'bottom-48 left-6',
+          tailClass: 'bottom-[-10px] left-8 border-t-[12px] border-t-white border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent !border-b-0',
           icon: '🪙',
           color: 'bg-white text-slate-800',
-          animation: { x: [-5, 5, -5] },
+          animation: { y: [-5, 5, -5] },
           showHand: true,
-          handIcon: '👈',
-          handAnimation: { x: [0, -10, 0] },
-          handPosition: 'top-1/2 left-[-40px] -translate-y-1/2',
-          clickable: true
+          handIcon: '👇',
+          handAnimation: { y: [0, 10, 0] },
+          handPosition: 'top-[120%] left-8',
+          clickable: false,
+          showNext: false
         };
-      case 'equip_new_item':
+      case 'equip_guide':
         return {
-          text: t.equip_new_item,
+          text: t.equip_guide,
           position: 'bottom-24 left-1/2 -translate-x-1/2',
           tailClass: 'bottom-[-10px] left-1/2 -translate-x-1/2 border-t-[12px] border-t-white border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent !border-b-0',
           icon: '🎒',
@@ -70,7 +74,8 @@ export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang })
           handIcon: '👇',
           handAnimation: { y: [0, 10, 0] },
           handPosition: 'top-[120%] left-1/2 -translate-x-1/2',
-          clickable: true
+          clickable: false,
+          showNext: false
         };
       default:
         return null;
@@ -81,10 +86,12 @@ export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang })
 
   return (
     <div 
-      className={`absolute inset-0 z-[9999] ${config?.clickable ? 'pointer-events-auto' : 'pointer-events-none'} overflow-hidden`}
-      onClick={() => {
-        if (config?.clickable && step) {
-          finishTutorial(step);
+      className={`absolute inset-0 z-[9999] ${config?.clickable || config?.showNext || step === 'welcome' || step === 'swipe_guide' || step === 'gacha_guide' || step === 'equip_guide' ? 'pointer-events-auto' : 'pointer-events-none'} overflow-hidden`}
+      onClick={(e) => {
+        // Block all clicks during strict tutorial steps unless it's a specific button
+        if (step === 'powerup_intro' || step === 'gacha_guide' || step === 'equip_guide') {
+          e.stopPropagation();
+          e.preventDefault();
         }
       }}
     >
@@ -126,10 +133,25 @@ export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang })
               <motion.div
                 animate={config.handAnimation}
                 transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                className={`absolute text-4xl ${config.handPosition}`}
+                className={`absolute text-4xl ${config.handPosition} pointer-events-none`}
               >
                 {config.handIcon}
               </motion.div>
+            )}
+
+            {/* Next Button */}
+            {config.showNext && (
+              <div className="mt-4 flex justify-center">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (config.nextStep) advanceTutorial(config.nextStep as TutorialStep);
+                  }}
+                  className="pointer-events-auto bg-blue-500 hover:bg-blue-600 text-white font-bold text-sm px-6 py-2 rounded-full shadow-lg transition-transform active:scale-95"
+                >
+                  Next
+                </button>
+              </div>
             )}
 
             {/* Skip Button (only for welcome/swipe) */}
@@ -138,7 +160,7 @@ export const TutorialOverlay: React.FC<Props> = ({ step, finishTutorial, lang })
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    finishTutorial(step as string);
+                    advanceTutorial('finished');
                   }}
                   className="pointer-events-auto bg-black/20 hover:bg-black/30 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-colors"
                 >
